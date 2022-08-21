@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,100;1,300&display=swap');
+
+.App {
+	font-family: 'Roboto', sans-serif;
+	background-color: #222;
+	color: white;
+}
+
+.form-control, .form-control:active {
+	border-radius: 2px;
+	background-color: #fff2;
+	border-color: #fff1;
+	box-shadow:#0000;
+	color: #ccc;
+	height:40px;
+}
+.form-control:focus, .form-control:active:focus, .form-control:hover:focus {
+	color: #fff;
+	border-color: #fff8;
+	background-color: #fff2;
+	box-shadow: none;
+}
+.form-control:hover {
+	background-color: #fff2;
+	border-color: #fff3;
+	color: white;
+	box-shadow: none;
+}
+.form-control:hover:active { border-color: #fffc; }
+
+.input-group-text {
+background-color: #4441;
+color:#ccc;
+border-color: #fff1;
+border-radius: 2px;
+}
+
+.btn {
+	border-radius: 2px;
+	background-color: #fff0;
+	border-color: #0000;
+	color: #ccc;
+}
+.btn:disabled {
+	background-color: #fff0;
+	border-color: #fff0;
+	color: #fff3;
+}
+.btn:focus, .btn:active, .btn:active:focus {
+	color: #ccc;
+	border-color: #0000;
+	background-color: #fff0;
+	box-shadow: none;
+}
+.btn:hover, .btn:hover:focus {
+	background-color: #fff2;
+	border-color: #0003;
+	color: white;
+	box-shadow: none;
+}
+.btn:hover:active { border-color: #fffc; }
+
+.btn.btn-green { color: #0c0a; }
+.btn.btn-red { color: green !important; }
+.btn.btn-yellow { color: green !important; }
+.btn.btn-blue { color: green !important; }
+
+.btn.btn-green:hover, .btn.btn-green:hover:focus {
+	color: #0c0f;
+	background-color: #0c02;
+}
