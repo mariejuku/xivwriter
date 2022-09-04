@@ -1,24 +1,25 @@
 import styled from "styled-components";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from './layout';
 
 import { H1 } from './layout';
 
 function Header() {
     return (
-        <HContainer fluid>
-            <Row>
-                <Col>
-                    <H1> XIV Writer </H1>
-                </Col>
-            </Row>
-        </HContainer>
+        <HRow>
+            <Col>
+                <H1> Orchestrion Roll </H1>
+            </Col>
+        </HRow>
     );
 }
 
 export default Header;
 
-const HContainer = styled(Container)`
-padding:2em !important;
+const HRow = styled(Row)`
+padding:1em 2em !important;
 background: #25a;
 color:white;
+& h1 {
+    margin-bottom:0;
+}
 `;

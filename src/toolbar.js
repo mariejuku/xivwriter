@@ -1,38 +1,20 @@
 import styled from "styled-components";
-import { Container, Row, Col, InputGroup, Stack } from 'react-bootstrap';
+import { InputGroup, Stack } from 'react-bootstrap';
+import Soundfont from 'soundfont-player';
 
-import { Icon, IconButton, Form, Button } from "./layout";
-import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { Icon, IconButton, SliderButton, Form, Button, Divider, Row, Col } from "./layout";
+import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle, faCaretRight, faCopy, faCut, faPaste, faBorderStyle, faVolumeHigh, faVolumeLow, faGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';
 
-
-const TCol = styled(Col)`
-padding:0;
+const Insert = styled.div`
+width:120px;
+height:80px;
+box-shadow:inset 0 0 6px #000000;
+background:#fff2;
 `
 
-function Divider() {
-    return (
-        <DividerOuter>
-            <DividerInner />
-        </DividerOuter>
-    );
-}
 
-const DividerOuter = styled.div`
-width:40px;
-height:40px;
-text-align:center;
-margin:0px;
-padding:8px;
-`
-
-const DividerInner = styled.div`
-background:#fff6;
-width:1px;
-height:100%;
-margin:auto;
-`
 
 class Toolbar extends React.Component {
     constructor(props) {
@@ -41,41 +23,56 @@ class Toolbar extends React.Component {
 
     handleChange = (event) => {
         console.log(event.target.value);
-    }
+    }    
 
     render() {
         var song = this.props.song;
+        var player = this.props.player;
         return (
-            <Container fluid >
                 <Row>
-                    <TCol xs="auto">
+                    <Col xs="auto">
                         <Stack direction="horizontal" gap={0}>
-                            <IconButton variant="green" icon={faPlayCircle} size="lg" />
+                            <IconButton variant="green" icon={faPlayCircle} size="lg" onClick={function() {
+                                console.log("clikc");
+                                player.play();
+                            }}/>
+                            <SliderButton icon={faGear} />
+                            <SliderButton icon={faCaretRight} />
+                            <Col xs="auto">
+                                <Insert/>
+                            </Col>
                             <Stack direction="vertical" gap={0}>
                                 <Stack direction="horizontal" gap={0}>
                                     <Col sm="auto">
                                         <InputGroup>
                                             <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>BPM</i></InputGroup.Text>
-                                            <Form.Control type="number" value={song.bpm} placeholder={song.bpm} className="bpm" onChange={this.props.changeBPM} />
+                                            <Form.Control type="number" value={song.bpm} placeholder={song.bpm} className="bpm" onChange={song.changeBPM} />
                                         </InputGroup>
                                     </Col>
                                     <Divider />
                                     <Col sm="auto">
                                         <InputGroup>
                                             <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>Name</i></InputGroup.Text>
-                                            <Form.Control className="songName" />
+                                            <Form.Control className="songName" value={song.name} placeholder="Song Name" onChange={song.changeName}/>
                                         </InputGroup>
                                     </Col>
-
                                 </Stack>
                                 <Stack direction="horizontal" gap={0}>
                                     <IconButton icon={faEdit} />
                                     <IconButton icon={faMousePointer} />
                                     <IconButton icon={faEraser} />
                                     <Divider />
+                                    <IconButton icon={faCopy} />
+                                    <IconButton icon={faCut} />
+                                    <IconButton icon={faPaste} />
+                                    <IconButton icon={faBorderStyle} />
+                                    <Divider />
                                     <IconButton icon={faSearchLocation} />
                                     <IconButton icon={faSearchMinus} />
                                     <IconButton icon={faSearchPlus} />
+                                    <Divider />
+                                    <IconButton icon={faVolumeHigh} />
+                                    <Form.Range value={player.volume} onChange={player.changeVolume}/>
                                     <Divider />
                                     <Button disabled size="sm">Heck</Button>
                                     <Button>Heck</Button>
@@ -84,9 +81,8 @@ class Toolbar extends React.Component {
                                 </Stack>
                             </Stack>
                         </Stack>
-                    </TCol>
+                    </Col>
                 </Row>
-            </Container>
         );
     }
 }

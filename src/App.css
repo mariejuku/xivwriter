@@ -1,9 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,100;1,300&display=swap');
 
+@font-face {
+    font-family: 'Hingashi Extended';
+    src: url('HingashiExtended.woff2') format('woff2'),
+        url('HingashiExtended.woff') format('woff'),
+        url('HingashiExtended.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 .App {
 	font-family: 'Roboto', sans-serif;
 	background-color: #222;
 	color: white;
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+	display:flex;
+	flex-direction: column;
 }
 
 .form-control, .form-control:active {
@@ -69,3 +86,5 @@ border-radius: 2px;
 	color: #0c0f;
 	background-color: #0c02;
 }
+
+canvas { background:#fff3; }
