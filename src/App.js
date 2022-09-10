@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import React from 'react';
 import Soundfont from 'soundfont-player';
+//import './soundfont/ffxiv-fixed/electric_guitar_muted-ogg';
 
 import { Container, Row, Col } from './layout';
 import Header from './header';
@@ -89,7 +90,9 @@ class App extends React.Component {
     }
 
     async AppStartup() {
-        this.clavinet = await Soundfont.instrument(this.audioContext, 'clavinet', { soundfont: 'FluidR3_GM' });
+        
+        this.clavinet = await Soundfont.instrument(this.audioContext, './electric_guitar_clean-mp3.js');
+        console.log(this.clavinet);
     }
 }
 
