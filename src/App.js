@@ -74,26 +74,27 @@ class App extends React.Component {
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
             song: new Song(this),
-            player: new Player(this)
+            player: new Player(this),
+            mouse: {
+                left: false
+            }
         };
     }
 
-    SetTooltip(text) {
-        this.setState({ tooltip:text });
-    }
+    SetTooltip = (text) => { this.setState({ tooltip:text }); }
+    UnsetTooltip = () => {this.setState({ tooltip:"Orchestrion Roll" });}
 
-    UnsetTooltip() {
-        this.setState({ tooltip:"Orchestrion Roll" });
-    }
+    MouseDown = () => {this.setState({ mouse: { left: true } })}
+    MouseUp = () => {this.setState({ mouse: { left: false } })}
 
     render() {
         return (
             <>
-                <div className='App'>
+                <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Header />
                         <Toolbar song={this.state.song} player={this.state.player} />
-                        <Sequencer player={this.state.player}/>
+                        <Sequencer player={this.state.player} mouse={this.state.mouse}/>
                         <Footer tooltip={this.state.tooltip}/>
                     </Container>
                 </div>
@@ -102,8 +103,7 @@ class App extends React.Component {
     }
 
     async AppStartup() {
-        
-        this.clavinet = await Soundfont.instrument(this.audioContext, 'http://localhost:3000/contrabass-ogg.js');
+        this.clavinet = await Soundfont.instrument(this.audioContext, 'http://localhost:3000/instruments/electric_guitar_clean-mp3.js');
         console.log(this.clavinet);
     }
 }

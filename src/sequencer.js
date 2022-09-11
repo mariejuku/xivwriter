@@ -57,10 +57,10 @@ class Sequencer extends React.Component {
                     <CanvasPanel xs="2" style={{width:"120px"}}>
                         <PianoRoll>
                             <Stack direction="vertical" gap={0}>
-                                <PianoKey number={6} name="C" player={this.props.player}></PianoKey>
-                                <PianoOctave octaveNumber={5} player={this.props.player}/>
-                                <PianoOctave octaveNumber={4} player={this.props.player}/>
-                                <PianoOctave octaveNumber={3} player={this.props.player}/>
+                                <PianoKey number={6} name="C" mouse={this.props.mouse} player={this.props.player}></PianoKey>
+                                <PianoOctave octaveNumber={5} mouse={this.props.mouse} player={this.props.player}/>
+                                <PianoOctave octaveNumber={4} mouse={this.props.mouse} player={this.props.player}/>
+                                <PianoOctave octaveNumber={3} mouse={this.props.mouse} player={this.props.player}/>
                             </Stack>
                         </PianoRoll>
                     </CanvasPanel>

@@ -28,10 +28,18 @@ padding-left:0;
 padding-right:0;
 `
 
-
 export const Button = styled(bButton)`
     overflow: hidden;
+    background-color: ${props => props.enabled ? "#dddf" : "#111f"};
+    color: ${props => props.enabled ? "#444f" : "#cccf"};
+    box-shadow: 0 0 10px #ddd8;
 `
+
+// export const Button = props => {
+//     return (
+//         <LButton>{props.children}</LButton>
+//     );
+// }
 
 export const IconButtonContainer = styled(Button)`
     padding: 0 !important;
@@ -55,7 +63,7 @@ height:80px;
 
 export const IconButton = function IconButton(props) {
     return (
-        <IconButtonContainer variant={props.variant} size={props.size} onClick={props.onClick}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer variant={props.variant} size={props.size} onClick={props.onClick} enabled={true}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 
@@ -98,6 +106,7 @@ margin:auto;
 `
 
 export const PianoKeyOuter = styled(bButton)`
+&,&.btn:focus {
 padding:.2em .5em;
 width:100%;
 height:20px;
@@ -122,9 +131,13 @@ border-radius: ${function (props) {
                 return "0 4px 4px 0";
         }
     }};
+}
 &.btn:hover,&.btn:hover:focus {
     background: ${props => props.sharp ? "linear-gradient(90deg, #555, #222)" : "linear-gradient(90deg, #aaa, #ccc)"};
     color:${props => props.sharp ? "ccc" : "#222"};
+}
+&.btn:hover:active {
+    background: ${props => props.sharp ? "linear-gradient(90deg, #222, #111)" : "linear-gradient(90deg, #555, #888)"};
 }
 `
 
@@ -136,18 +149,18 @@ export class PianoOctave extends React.Component {
     render() {
         return (
             <>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="B"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="A#" sharp></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="A"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="G#" sharp></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="G"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="F#" sharp></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="F"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="E"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="D#" sharp></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="D"></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="C#" sharp></PianoKey>
-                <PianoKey number={this.props.octaveNumber} player={this.props.player} name="C"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="B"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="A#" sharp></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="A"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="G#" sharp></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="G"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="F#" sharp></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="F"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="E"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="D#" sharp></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="D"></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="C#" sharp></PianoKey>
+                <PianoKey mouse={this.props.mouse} number={this.props.octaveNumber} player={this.props.player} name="C"></PianoKey>
             </>
         );
     }
@@ -156,6 +169,27 @@ export class PianoOctave extends React.Component {
 export class PianoKey extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            depressed: false
+        }
+    }
+
+    onEnter = (event) => {
+        if(this.props.mouse.left) {
+            this.updatePress(true);
+        }
+    }
+    onLeave = (event) => {
+        this.updatePress(false);
+    }
+
+    updatePress = (newPress) => {
+        if (newPress === true && newPress != this.state.depressed) {
+            this.playNote();
+        }
+        this.setState({
+            depressed: newPress
+        });
     }
 
     playNote = (event) => {
@@ -163,9 +197,12 @@ export class PianoKey extends React.Component {
     }
 
     render() {
-        
         return (
-            <PianoKeyOuter sharp={this.props.sharp} name={this.props.name} onClick={this.playNote}>
+            <PianoKeyOuter sharp={this.props.sharp} name={this.props.name} 
+            onMouseEnter={this.onEnter} 
+            onMouseLeave={this.onLeave} 
+            onMouseDown={()=>this.updatePress(true)}
+            onMouseUp={()=>this.updatePress(false)}>
                 {this.props.name}{this.props.number}
             </PianoKeyOuter>
         );
