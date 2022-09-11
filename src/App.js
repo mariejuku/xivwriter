@@ -5,6 +5,9 @@ import React from 'react';
 import Soundfont from 'soundfont-player';
 //import './soundfont/ffxiv-fixed/electric_guitar_muted-ogg';
 
+//require('./electric_guitar_clean-mp3');
+//console.log(MIDI.Soundfont.electric_guitar_clean);
+
 import { Container, Row, Col } from './layout';
 import Header from './header';
 import Footer from './footer';
@@ -69,9 +72,18 @@ class App extends React.Component {
 
         this.state = {
             loadingState: "unloaded",
+            tooltip: "Orchestrion Roll",
             song: new Song(this),
             player: new Player(this)
         };
+    }
+
+    SetTooltip(text) {
+        this.setState({ tooltip:text });
+    }
+
+    UnsetTooltip() {
+        this.setState({ tooltip:"Orchestrion Roll" });
     }
 
     render() {
@@ -82,7 +94,7 @@ class App extends React.Component {
                         <Header />
                         <Toolbar song={this.state.song} player={this.state.player} />
                         <Sequencer player={this.state.player}/>
-                        <Footer />
+                        <Footer tooltip={this.state.tooltip}/>
                     </Container>
                 </div>
             </>
@@ -91,7 +103,7 @@ class App extends React.Component {
 
     async AppStartup() {
         
-        this.clavinet = await Soundfont.instrument(this.audioContext, './electric_guitar_clean-mp3.js');
+        this.clavinet = await Soundfont.instrument(this.audioContext, 'http://localhost:3000/contrabass-ogg.js');
         console.log(this.clavinet);
     }
 }

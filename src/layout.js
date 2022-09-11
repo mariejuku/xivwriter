@@ -200,9 +200,12 @@ export class Measure extends React.Component {
     }
 }
 
-/*
-<>
-                {Array.from({ length: 10 }, (_, i) => <PianoKey key={i}>Your text</PianoKey>)}
-            </>
-            */
-
+export const Text = props => {
+    return (
+        <Row>
+            <Col>
+                {props.children}
+            </Col>
+        </Row>
+    );
+}

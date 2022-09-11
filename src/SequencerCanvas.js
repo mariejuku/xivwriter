@@ -111,7 +111,7 @@ const SequencerCanvas = props => {
     return (
         <SequencerDiv>
         <canvas ref={canvasRef} width="1920" height = "740" {...props} onClick={onCanvasClick}/>
-        <CanvasOverlay>
+        <CanvasOverlay onClick={onCanvasClick}>
             <Note style={{
                 left:"5px",
                 zoom:"8"}}/>
@@ -129,6 +129,7 @@ const SequencerCanvas = props => {
                 top:"160px"
             }}/>
             </CanvasOverlay>
+            
         </SequencerDiv>
     );
     
