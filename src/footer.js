@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
 
-import { Container, Row, Col, Icon, IconButton, Form, Button, Divider, Text } from "./layout";
+import { Container, Row, Col, Icon, IconButton, Form, Button, Divider, Text } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';

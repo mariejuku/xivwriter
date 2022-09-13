@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
-import Soundfont from 'soundfont-player';
-
-import { Icon, IconButton, SliderButton, Form, Button, Divider, Row, Col } from "./layout";
+import { Form, Row, Col } from "./layout/layout";
+import { Button, IconButton, SliderButton, Divider } from './layout/controls'
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle, faCaretRight, faCopy, faCut, faPaste, faBorderStyle, faVolumeHigh, faVolumeLow, faGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from 'react';

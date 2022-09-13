@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { Container, Row, Col } from './layout';
+import { Container, Row, Col } from './layout/page';
 
-import { H1 } from './layout';
+import { H1 } from './layout/page';
 
 function Header() {
     return (

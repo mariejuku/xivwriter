@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
 import Note from './layout/note';
-import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave,Container, Row, Col } from "./layout";
+import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave,Container, Row, Col } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useEffect } from 'react'

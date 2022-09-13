@@ -8,7 +8,7 @@ import Soundfont from 'soundfont-player';
 //require('./electric_guitar_clean-mp3');
 //console.log(MIDI.Soundfont.electric_guitar_clean);
 
-import { Container, Row, Col } from './layout';
+import { Container, Row, Col } from './layout/layout';
 import Header from './header';
 import Footer from './footer';
 import Toolbar from './toolbar';
