@@ -58,6 +58,10 @@ border-radius: 2px;
 	border-color: #0000;
 	color: #ccc;
 }
+.btn, .btn svg {
+	transition: color .05s, background-color 1s, border-color .2s, border-width .2s, box-shadow .75s, text-shadow .75s, filter .1s;
+}
+.btn:hover, .btn:hover svg { transition-duration: .1s; }
 .btn:disabled {
 	background-color: #fff0;
 	border-color: #fff0;
@@ -76,15 +80,5 @@ border-radius: 2px;
 	box-shadow: none;
 }
 .btn:hover:active { border-color: #fffc; }
-
-.btn.btn-green { color: #0c0a; }
-.btn.btn-red { color: green !important; }
-.btn.btn-yellow { color: green !important; }
-.btn.btn-blue { color: green !important; }
-
-.btn.btn-green:hover, .btn.btn-green:hover:focus {
-	color: #0c0f;
-	background-color: #0c02;
-}
 
 canvas { background:#fff3; }

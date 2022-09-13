@@ -6,13 +6,55 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 
-
-
 export const Button = styled(bButton)`
     overflow: hidden;
-    background-color: ${props => props.enabled ? "#dddf" : "#fff0"};
-    color: ${props => props.enabled ? "#444f" : "#cccf"};
-    /*box-shadow: 0 0 10px #ddd8;*/
+
+    box-shadow: 0 0 10px ${props => props.lit ? "#ddd8" : "#ddd0"};     
+
+    ${function (props) {
+        var highlightColor = `#fff`;
+        var normalColor = `#ccc`;
+        if (props.variant) {
+            switch (props.variant) {
+                case 'green':
+                    highlightColor = `#c00`
+                    normalColor = `#a00`
+                    break;
+            }
+        }
+        
+        return `
+        color: ${highlightColor}a;
+
+        &:hover, &:hover:focus {
+            color: ${highlightColor}f;
+
+            & svg {
+                filter: drop-shadow(0 0 5px #fff8);
+            }
+        }
+        
+
+        ${function(props) {
+            if (props.variant) {
+                return `
+                    background-color: ${highlightColor}2;
+                    &:hover, &:hover:focus {
+                        background-color: ${highlightColor}4;
+                    }
+                `;
+            } else {
+                return `
+                    background-color: ${highlightColor}0;
+                    &:hover, &:hover:focus {
+                        background-color: ${highlightColor}2;
+                    }
+                `;
+            }
+        }}
+        `;
+    }}
+
 `
 
 // export const Button = props => {
@@ -34,9 +76,7 @@ export const IconButtonContainer = styled(Button)`
         font-size: 4em;
     }
 
-    & svg {
-        filter: drop-shadow(0 0 5px #fff8);
-    }
+    
 `
 
 export const SlideButtonContainer = styled(IconButtonContainer)`
@@ -47,7 +87,7 @@ height:80px;
 
 export const IconButton = function IconButton(props) {
     return (
-        <IconButtonContainer variant={props.variant} size={props.size} onClick={props.onClick} enabled={false}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer variant={props.variant} size={props.size} onClick={props.onClick} lit={false}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 
