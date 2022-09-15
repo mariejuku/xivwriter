@@ -6,64 +6,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 
-export const Button = styled(bButton)`
+export const LButton = styled(bButton)`
     overflow: hidden;
 
     box-shadow: 0 0 10px ${props => props.lit ? "#ddd8" : "#ddd0"};     
 
-    ${function (props) {
-        var highlightColor = `#fff`;
-        var normalColor = `#ccc`;
-        if (props.variant) {
-            switch (props.variant) {
-                case 'green':
-                    highlightColor = `#c00`
-                    normalColor = `#a00`
-                    break;
-            }
+    color: ${props => props.color};
+    background-color: ${props => props.background} ${props => props.showBackground ? `4` : `2`};
+
+    &:hover, &:hover:focus {
+        color: ${props => props.overColor};
+        background-color: ${props => props.overBackground};
+
+        & svg {
+            filter: drop-shadow(0 0 5px #fff8);
         }
-        
-        return `
-        color: ${highlightColor}a;
-
-        &:hover, &:hover:focus {
-            color: ${highlightColor}f;
-
-            & svg {
-                filter: drop-shadow(0 0 5px #fff8);
-            }
-        }
-        
-
-        ${function(props) {
-            if (props.variant) {
-                return `
-                    background-color: ${highlightColor}2;
-                    &:hover, &:hover:focus {
-                        background-color: ${highlightColor}4;
-                    }
-                `;
-            } else {
-                return `
-                    background-color: ${highlightColor}0;
-                    &:hover, &:hover:focus {
-                        background-color: ${highlightColor}2;
-                    }
-                `;
-            }
-        }}
-        `;
-    }}
-
+    }
 `
 
-// export const Button = props => {
-//     return (
-//         <LButton>{props.children}</LButton>
-//     );
-// }
+export const Button = props => {
+    let color = '#c00';
+    let overColor = '#fff';
+    let background = '#c00';
+    let showBackground = true;
 
-export const IconButtonContainer = styled(Button)`
+    if (props.variant) {
+        switch(props.variant) {
+            case 'green':
+        }
+        showBackground = true;
+    }
+
+    return (
+        <LButton color={color} overColor={overColor} background={background} showBackground={showBackground}>{props.children}</LButton>
+    );
+}
+
+export const IconButtonContainer = styled(LButton)`
     padding: 0 !important;
 	line-height: 0;
 	font-size: 1.5em;
@@ -74,9 +53,7 @@ export const IconButtonContainer = styled(Button)`
         height: 80px;
         width: 80px;
         font-size: 4em;
-    }
-
-    
+    }    
 `
 
 export const SlideButtonContainer = styled(IconButtonContainer)`
