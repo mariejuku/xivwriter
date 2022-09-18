@@ -65,7 +65,7 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas/>
+                        <SequencerCanvas measuresToPixels={this.props.player.measuresToPixels} subdivisions={this.props.player.subdivisions}/>
                     </CanvasPanel>
                 </SequenceRow>
                 </>

@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { InputGroup, Stack } from 'react-bootstrap';
-
+import { InputGroup, Stack, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
 import { Container, Row, Col, Icon, IconButton, Form, Button, Divider, Text } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +27,22 @@ class Footer extends React.Component {
                                     <IconButton icon={faSearchLocation} />
                                     <IconButton icon={faSearchMinus} />
                                     <IconButton icon={faSearchPlus} />
+                                    <Divider />
+                                    <Col sm="auto">
+                                        <InputGroup>
+                                            <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>Grid</i></InputGroup.Text>
+                                            <Form.Control className="playerGrid" value={"1/"+this.props.player.gridValue} onChange={this.props.player.changeGrid}/>
+                                        </InputGroup>
+                                    </Col>
+                                    <DropdownButton as={ButtonGroup} title="a" >
+                                        <Dropdown.Item eventKey="1">1/2</Dropdown.Item>
+                                        <Dropdown.Item eventKey="2">1/3</Dropdown.Item>
+                                        <Dropdown.Item eventKey="3">1/4
+                                        Active Item
+                                        </Dropdown.Item>
+                                        <Dropdown.Divider />
+                                        <Dropdown.Item eventKey="4">Separated link</Dropdown.Item>
+                                    </DropdownButton>
                                     <Divider />
                                     <Text>{this.props.tooltip}</Text>
                                 </Stack>

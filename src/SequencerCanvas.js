@@ -25,15 +25,13 @@ left:0;
 
 const SequencerCanvas = props => {
   
-    const canvasRef = useRef(null)
-
+    const canvasRef = useRef(null);
     const settings = {
         keyHeight:20,
-        width:40,
         beats:4
     }
 
-    const getMousePos = function(canvas, evt) {
+    const getMousePos = function(canvas, evt, props) {
         var rect = canvas.getBoundingClientRect(), // abs. size of element
           scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
           scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
@@ -44,7 +42,7 @@ const SequencerCanvas = props => {
         }
     }
 
-    const drawOctaves = function(ctx,canvas) {
+    const drawOctaves = function(ctx,canvas,props) {
         for (let i = 1; i < 37; i+=12) {
             ctx.strokeStyle = '#0006';
             ctx.lineWidth = 1;
@@ -52,12 +50,12 @@ const SequencerCanvas = props => {
             ctx.moveTo(0, (i*settings.keyHeight) + 0.5);
             ctx.lineTo(canvas.width, (i*settings.keyHeight) + 0.5);
             ctx.stroke();
-            drawKeys(i+1,ctx,canvas);
+            drawKeys(i+1,ctx,canvas,props);
         }
         
     }
 
-    const drawKeys = function(j,ctx,canvas) {
+    const drawKeys = function(j,ctx,canvas, props) {
         ctx.strokeStyle = '#0002';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -69,14 +67,16 @@ const SequencerCanvas = props => {
         ctx.stroke();
     }
 
-    const drawMeasures = function(ctx,canvas) {
+    const drawMeasures = function(ctx,canvas, props) {
+        let width = props.measuresToPixels / props.subdivisions;
+
         ctx.strokeStyle = '#0002';
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let i = 0; i < canvas.width; i++) {
-            if (i % 4 != 0) {
-                ctx.moveTo((i*settings.width) + 0.5, 0);
-                ctx.lineTo((i*settings.width) + 0.5,canvas.height);
+            if (i % props.subdivisions != 0) {
+                ctx.moveTo((i*width) + 0.5, 0);
+                ctx.lineTo((i*width) + 0.5,canvas.height);
             }
         }
         ctx.stroke();
@@ -84,22 +84,22 @@ const SequencerCanvas = props => {
         ctx.lineWidth = 2;
         ctx.beginPath();
         for (let i = 0; i < canvas.width; i++) {
-            if (i % 4 === 0) {
-                ctx.moveTo((i*settings.width) + 0.5, 0);
-                ctx.lineTo((i*settings.width) + 0.5,canvas.height);
+            if (i % props.subdivisions === 0) {
+                ctx.moveTo((i*width) + 0.5, 0);
+                ctx.lineTo((i*width) + 0.5,canvas.height);
             }
         }
         ctx.stroke();
     }
 
-    const draw = function(ctx,canvas,props) { drawOctaves(ctx,canvas); drawMeasures(ctx,canvas); }
+    const draw = function(ctx,canvas,props) { drawOctaves(ctx,canvas,props); drawMeasures(ctx,canvas,props); }
     
     useEffect(() => {
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')
       context.clearRect(0, 0, canvas.width, canvas.height);
       //Our draw come here
-      draw(context,canvas)
+      draw(context,canvas, props)
     }, [draw])
 
     const onCanvasClick = function(event) {

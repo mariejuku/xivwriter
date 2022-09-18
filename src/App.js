@@ -7,6 +7,7 @@ import Soundfont from 'soundfont-player';
 
 //require('./electric_guitar_clean-mp3');
 //console.log(MIDI.Soundfont.electric_guitar_clean);
+import Player from './Player';
 
 import { Container, Row, Col } from './layout/layout';
 import Header from './header';
@@ -41,33 +42,13 @@ class Song {
     }
 }
 
-class Player {
-    constructor(app) {
-        this.app = app;
-        this.volume = 50;
-        this.audioContext = app.audioContext;
-    }
-
-    play = (note) => {
-        this.app.clavinet.play(note);
-    }
-
-    changeVolume = (event) => {
-        console.log(event.target.value);
-        this.volume = event.target.value;
-        this.app.setState({ player: this });
-    }
-}
-
 class App extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.audioContext = new AudioContext();
-
         this.clavinet = undefined;
-
         this.AppStartup();
 
         this.state = {
@@ -94,8 +75,8 @@ class App extends React.Component {
                     <Container fluid>
                         <Header />
                         <Toolbar song={this.state.song} player={this.state.player} />
-                        <Sequencer player={this.state.player} mouse={this.state.mouse}/>
-                        <Footer tooltip={this.state.tooltip}/>
+                        <Sequencer player={this.state.player} song={this.state.song} mouse={this.state.mouse}/>
+                        <Footer tooltip={this.state.tooltip} player={this.state.player}/>
                     </Container>
                 </div>
             </>
