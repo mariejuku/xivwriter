@@ -20,10 +20,13 @@ export default class Player {
         if (input[1] !== undefined) {
             newGrid = input[1];
             console.log(input[1]);
-            //success
-            this.subdivisons = newGrid;
+            if (!isNaN(parseInt(newGrid))) {
+                let newSub = Math.min(Math.max(newGrid, 1), 64);
+                this.subdivisions = newSub;
+                newGrid = newSub;
+            }
         }
-        this.gridValue = newGrid;
+        this.gridValue = "1/"+newGrid;
         this.app.setState({player: this})
     }
 

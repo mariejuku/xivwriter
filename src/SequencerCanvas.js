@@ -69,17 +69,20 @@ const SequencerCanvas = props => {
 
     const drawMeasures = function(ctx,canvas, props) {
         let width = props.measuresToPixels / props.subdivisions;
-
-        ctx.strokeStyle = '#0002';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        for (let i = 0; i < canvas.width; i++) {
-            if (i % props.subdivisions != 0) {
-                ctx.moveTo((i*width) + 0.5, 0);
-                ctx.lineTo((i*width) + 0.5,canvas.height);
+        //submeasure
+        if (props.subdivisions <= 16){
+            ctx.strokeStyle = '#0002';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i < canvas.width; i++) {
+                if (i % props.subdivisions != 0) {
+                    ctx.moveTo((i*width) + 0.5, 0);
+                    ctx.lineTo((i*width) + 0.5,canvas.height);
+                }
             }
+            ctx.stroke();
         }
-        ctx.stroke();
+        //measure
         ctx.strokeStyle = '#0006';
         ctx.lineWidth = 2;
         ctx.beginPath();

@@ -8,6 +8,7 @@ import Soundfont from 'soundfont-player';
 //require('./electric_guitar_clean-mp3');
 //console.log(MIDI.Soundfont.electric_guitar_clean);
 import Player from './Player';
+import Song from './Song';
 
 import { Container, Row, Col } from './layout/layout';
 import Header from './header';
@@ -15,32 +16,6 @@ import Footer from './footer';
 import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
-
-class Song {
-    constructor(app) {
-        this.app = app;
-
-        this.name = "song";
-        this.bpm = 100;
-    }
-
-    changeBPM = (event) => {
-        var newBPM = event.target.value;
-        console.log(newBPM);
-        var validBPM = this.bpm;
-        if (!isNaN(newBPM)) { validBPM = newBPM; }
-        if (validBPM < 1) (validBPM = 1);
-
-        this.bpm = validBPM;
-        this.app.setState({ song: this });
-    }
-
-    changeName = (event) => {
-        console.log(event.target.value);
-        this.name = event.target.value;
-        this.app.setState({ song: this });
-    }
-}
 
 class App extends React.Component {
 

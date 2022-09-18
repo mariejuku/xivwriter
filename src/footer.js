@@ -31,7 +31,7 @@ class Footer extends React.Component {
                                     <Col sm="auto">
                                         <InputGroup>
                                             <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>Grid</i></InputGroup.Text>
-                                            <Form.Control className="playerGrid" value={"1/"+this.props.player.gridValue} onChange={this.props.player.changeGrid}/>
+                                            <Form.Control className="playerGrid" value={this.props.player.gridValue} onChange={this.props.player.changeGrid}/>
                                         </InputGroup>
                                     </Col>
                                     <DropdownButton as={ButtonGroup} title="a" >
