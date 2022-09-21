@@ -4,6 +4,7 @@ export default class Song {
 
         this.name = "song";
         this.bpm = 100;
+        this.timeSignature = 4; //beats per measure
     }
 
     changeBPM = (event) => {

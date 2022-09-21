@@ -35,6 +35,9 @@ class Toolbar extends React.Component {
                                 console.log("clikc");
                                 player.play();
                             }}/>
+                            <IconButton variant="red" icon={faPlayCircle} size="lg" />
+                            <IconButton variant="yellow" icon={faPlayCircle} size="lg" />
+                            <IconButton variant="blue" icon={faPlayCircle} size="lg" />
                             <SliderButton icon={faGear} />
                             <SliderButton icon={faCaretRight} />
                             <Col xs="auto">
@@ -65,7 +68,7 @@ class Toolbar extends React.Component {
                                     <IconButton icon={faCut} />
                                     <IconButton icon={faPaste} />
                                     <IconButton icon={faBorderStyle} />
-                                    <Divider />
+                                    {/* <Divider />
                                     <IconButton icon={faSearchLocation} />
                                     <IconButton icon={faSearchMinus} />
                                     <IconButton icon={faSearchPlus} />
@@ -76,7 +79,7 @@ class Toolbar extends React.Component {
                                     <Button disabled size="sm">Heck</Button>
                                     <Button>Heck</Button>
 
-                                    <Button variant="green">Heck</Button>
+                                    <Button variant="green">Heck</Button> */}
                                 </Stack>
                             </Stack>
                         </Stack>

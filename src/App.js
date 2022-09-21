@@ -51,7 +51,7 @@ class App extends React.Component {
                         <Header />
                         <Toolbar song={this.state.song} player={this.state.player} />
                         <Sequencer player={this.state.player} song={this.state.song} mouse={this.state.mouse}/>
-                        <Footer tooltip={this.state.tooltip} player={this.state.player}/>
+                        <Footer tooltip={this.state.tooltip} song={this.state.song} player={this.state.player}/>
                     </Container>
                 </div>
             </>

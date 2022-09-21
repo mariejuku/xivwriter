@@ -9,17 +9,17 @@ import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 export const LButton = styled(bButton)`
     overflow: hidden;
 
-    box-shadow: 0 0 10px ${props => props.lit ? "#ddd8" : "#ddd0"};     
+    box-shadow: 0 0 10px ${props => props.lit ? `${props.color}8` : `${props.color}0`};
 
     color: ${props => props.color};
-    background-color: ${props => props.background} ${props => props.showBackground ? `4` : `2`};
+    background-color: ${props => props.background};
 
     &:hover, &:hover:focus {
         color: ${props => props.overColor};
-        background-color: ${props => props.overBackground};
+        background-color: ${props => props.background};
 
         & svg {
-            filter: drop-shadow(0 0 5px #fff8);
+            filter: drop-shadow(0 0 5px ${props => props.overColor}b);
         }
     }
 `
@@ -38,7 +38,7 @@ export const Button = props => {
     }
 
     return (
-        <LButton color={color} overColor={overColor} background={background} showBackground={showBackground}>{props.children}</LButton>
+        <LButton color={color} overColor={overColor} background="#ahh" showBackground={showBackground}>{props.children}</LButton>
     );
 }
 
@@ -48,11 +48,13 @@ export const IconButtonContainer = styled(LButton)`
 	font-size: 1.5em;
     width:40px;
     height:40px;
-
+    box-shadow: inset 0 0 10px #0003;
+    
     &.btn-lg {
         height: 80px;
         width: 80px;
         font-size: 4em;
+        box-shadow: inset 0 0 30px #0003;
     }    
 `
 
@@ -63,8 +65,37 @@ height:80px;
 `
 
 export const IconButton = function IconButton(props) {
+    let themeColor = '#ccc';
+    let overColor = '#fff';
+    let showBackground = false;
+
+    if (props.variant) {
+        switch(props.variant) {
+            case 'green':
+                themeColor = '#0b4';
+                overColor = '#0e4';
+                break;
+            case 'red':
+                themeColor = '#b10';
+                overColor = '#e10';
+                break;
+            case 'yellow':
+                themeColor = '#fb0';
+                overColor = '#fb0';
+                break;
+            case 'blue':
+                themeColor = '#39e';
+                overColor = '#7be';
+                break;
+        }
+        showBackground = true;
+    }
+
+    let color = themeColor;
+    let background = `${themeColor}${showBackground?2:0}`;
+
     return (
-        <IconButtonContainer variant={props.variant} size={props.size} onClick={props.onClick} lit={false}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer size={props.size} overColor={overColor} color={color} background={background} onClick={props.onClick} lit={false}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 

@@ -68,26 +68,28 @@ const SequencerCanvas = props => {
     }
 
     const drawMeasures = function(ctx,canvas, props) {
-        let width = props.measuresToPixels / props.subdivisions;
-        //submeasure
-        if (props.subdivisions <= 16){
+        let subdivisions = props.player.subdivisions;
+        let width = props.player.beatsToPixels / subdivisions;
+        //sub-beat
+        if (subdivisions <= 16){
             ctx.strokeStyle = '#0002';
             ctx.lineWidth = 1;
             ctx.beginPath();
             for (let i = 0; i < canvas.width; i++) {
-                if (i % props.subdivisions != 0) {
+                if (i % subdivisions != 0) {
                     ctx.moveTo((i*width) + 0.5, 0);
                     ctx.lineTo((i*width) + 0.5,canvas.height);
                 }
             }
             ctx.stroke();
         }
+        //beat 
         //measure
         ctx.strokeStyle = '#0006';
         ctx.lineWidth = 2;
         ctx.beginPath();
         for (let i = 0; i < canvas.width; i++) {
-            if (i % props.subdivisions === 0) {
+            if (i % subdivisions === 0) {
                 ctx.moveTo((i*width) + 0.5, 0);
                 ctx.lineTo((i*width) + 0.5,canvas.height);
             }
@@ -98,8 +100,8 @@ const SequencerCanvas = props => {
     const draw = function(ctx,canvas,props) { drawOctaves(ctx,canvas,props); drawMeasures(ctx,canvas,props); }
     
     useEffect(() => {
-      const canvas = canvasRef.current
-      const context = canvas.getContext('2d')
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       //Our draw come here
       draw(context,canvas, props)
@@ -108,12 +110,12 @@ const SequencerCanvas = props => {
     const onCanvasClick = function(event) {
         const canvas = canvasRef.current;
         let pos = getMousePos(canvas, event);
-        console.log(pos);
+        props.onCanvasClick(event,pos,canvas);
     }
     
     return (
         <SequencerDiv>
-        <canvas ref={canvasRef} width="1920" height = "740" {...props} onClick={onCanvasClick}/>
+        <canvas ref={canvasRef} width="1920" height = "740" onClick={onCanvasClick}/>
         <CanvasOverlay onClick={onCanvasClick}>
             <Note style={{
                 left:"5px",

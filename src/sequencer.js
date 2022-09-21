@@ -36,6 +36,17 @@ class Sequencer extends React.Component {
         console.log(event.target.value);
     }
 
+    onCanvasClick = (event, pos, canvas) => {
+        let player = this.props.player;
+        let measure = pos.x/player.beatsToPixels;
+        let beat = Math.floor(measure*player.subdivisions);
+        console.log(`measure ${measure}`);
+        console.log(`beat ${beat}`);
+        let beatsPerSecond = this.props.song.bpm / 60;
+        console.log(`${beatsPerSecond}`);
+        //console.log(`time ${}`)
+    }
+
     render() {
         return (
                 <>
@@ -65,7 +76,7 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas measuresToPixels={this.props.player.measuresToPixels} subdivisions={this.props.player.subdivisions}/>
+                        <SequencerCanvas onCanvasClick={this.onCanvasClick} player={this.props.player}/>
                     </CanvasPanel>
                 </SequenceRow>
                 </>

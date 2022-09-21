@@ -34,15 +34,12 @@ class Footer extends React.Component {
                                             <Form.Control className="playerGrid" value={this.props.player.gridValue} onChange={this.props.player.changeGrid}/>
                                         </InputGroup>
                                     </Col>
-                                    <DropdownButton as={ButtonGroup} title="a" >
-                                        <Dropdown.Item eventKey="1">1/2</Dropdown.Item>
-                                        <Dropdown.Item eventKey="2">1/3</Dropdown.Item>
-                                        <Dropdown.Item eventKey="3">1/4
-                                        Active Item
-                                        </Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item eventKey="4">Separated link</Dropdown.Item>
-                                    </DropdownButton>
+                                    <Col sm="auto">
+                                    <InputGroup>
+                                            <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>Beats per measure</i></InputGroup.Text>
+                                            <Form.Control type="number" value={this.props.song.timeSignature} className="timeSignature"/>
+                                        </InputGroup>
+                                    </Col>
                                     <Divider />
                                     <Text>{this.props.tooltip}</Text>
                                 </Stack>

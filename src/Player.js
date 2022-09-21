@@ -4,9 +4,9 @@ export default class Player {
         this.volume = 50;
         this.audioContext = app.audioContext;
 
-        this.measuresToPixels = 160;
-        this.subdivisions = 3;
-        this.gridValue = 3;
+        this.beatsToPixels = 40;
+        this.subdivisions = 4;
+        this.gridValue = "1/4";
     }
 
     play = (note) => {
