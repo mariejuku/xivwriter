@@ -109,7 +109,7 @@ export class PianoKey extends React.Component {
 
 export const MeasureOuter = styled(bButton)`
 padding:.2em .5em;
-width:160px;
+width:${props => props.width}px;
 height:20px;
 display:block;
 box-shadow:none;
@@ -119,6 +119,8 @@ overflow:hidden;
 font-size:1em;
 border-color:#0003;
 border-radius:3px 3px 0 0;
+flex-shrink:0;
+flex-grow: 0;
 `
 
 export class Measure extends React.Component {
@@ -128,7 +130,7 @@ export class Measure extends React.Component {
 
     render() {
         return (
-            <MeasureOuter>
+            <MeasureOuter width={this.props.width}>
                 M
             </MeasureOuter>
         );

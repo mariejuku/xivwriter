@@ -69,30 +69,41 @@ const SequencerCanvas = props => {
 
     const drawMeasures = function(ctx,canvas, props) {
         let subdivisions = props.player.subdivisions;
-        let width = props.player.beatsToPixels / subdivisions;
+        let subWidth = props.player.beatsToPixels / subdivisions;
+        let beatsPerMeasure = props.song.timeSignature;
+        let beatWidth = props.player.beatsToPixels;
+        let measureWidth = props.player.beatsToPixels * beatsPerMeasure;
         //sub-beat
         if (subdivisions <= 16){
             ctx.strokeStyle = '#0002';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            for (let i = 0; i < canvas.width; i++) {
+            for (let i = 0; i*subWidth < canvas.width; i++) {
                 if (i % subdivisions != 0) {
-                    ctx.moveTo((i*width) + 0.5, 0);
-                    ctx.lineTo((i*width) + 0.5,canvas.height);
+                    ctx.moveTo((i*subWidth) + 0.5, 0);
+                    ctx.lineTo((i*subWidth) + 0.5,canvas.height);
                 }
             }
             ctx.stroke();
         }
         //beat 
+        ctx.strokeStyle = '#0006';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let i = 0; i*beatWidth < canvas.width; i++) {
+            if (i % (beatsPerMeasure) != 0) {
+                    ctx.moveTo((i*beatWidth) + 0.5, 0);
+                    ctx.lineTo((i*beatWidth) + 0.5,canvas.height);
+            }
+        }
+        ctx.stroke();
         //measure
         ctx.strokeStyle = '#0006';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        for (let i = 0; i < canvas.width; i++) {
-            if (i % subdivisions === 0) {
-                ctx.moveTo((i*width) + 0.5, 0);
-                ctx.lineTo((i*width) + 0.5,canvas.height);
-            }
+        for (let i = 0; i*measureWidth < canvas.width; i++) {
+            ctx.moveTo((i*measureWidth) + 0.5, 0);
+            ctx.lineTo((i*measureWidth) + 0.5,canvas.height);
         }
         ctx.stroke();
     }

@@ -42,6 +42,11 @@ class App extends React.Component {
 
     MouseDown = () => {this.setState({ mouse: { left: true } })}
     MouseUp = () => {this.setState({ mouse: { left: false } })}
+    resize = (event) => { console.log(event); event.preventDefault();}
+
+    componentDidMount() {
+        window.addEventListener("resize", this.resize.bind(this));
+    }
 
     render() {
         return (

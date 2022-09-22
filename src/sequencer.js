@@ -38,16 +38,21 @@ class Sequencer extends React.Component {
 
     onCanvasClick = (event, pos, canvas) => {
         let player = this.props.player;
-        let measure = pos.x/player.beatsToPixels;
-        let beat = Math.floor(measure*player.subdivisions);
-        console.log(`measure ${measure}`);
-        console.log(`beat ${beat}`);
+        let beat = pos.x/player.beatsToPixels;
+        let quantizedBeat = Math.floor(beat*player.subdivisions) / player.subdivisions;
+        //let beat = Math.floor(measure*player.subdivisions);
+        //console.log(`measure ${measure}`);
+        console.log(`beat ${quantizedBeat}`);
+        
         let beatsPerSecond = this.props.song.bpm / 60;
-        console.log(`${beatsPerSecond}`);
+        console.log(`bps: ${beatsPerSecond}`);
+        console.log(`second: ${quantizedBeat / beatsPerSecond}`);
         //console.log(`time ${}`)
     }
 
     render() {
+        let measureWidth = this.props.player.beatsToPixels * this.props.song.timeSignature;
+        
         return (
                 <>
                 <Row style={{height:"20px"}}>
@@ -56,10 +61,10 @@ class Sequencer extends React.Component {
                     <CanvasPanel>
                     <PianoRoll>
                             <Stack direction="horizontal" gap={0}>
-                            <Measure/>
-                            <Measure/>
-                            <Measure/>
-                            <Measure/>
+                            <Measure width={measureWidth}/>
+                            <Measure width={measureWidth}/>
+                            <Measure width={measureWidth}/>
+                            <Measure width={measureWidth}/>
                             </Stack>
                         </PianoRoll>
                     </CanvasPanel>
@@ -76,7 +81,7 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas onCanvasClick={this.onCanvasClick} player={this.props.player}/>
+                        <SequencerCanvas onCanvasClick={this.onCanvasClick} song={this.props.song} player={this.props.player}/>
                     </CanvasPanel>
                 </SequenceRow>
                 </>

@@ -37,7 +37,7 @@ class Footer extends React.Component {
                                     <Col sm="auto">
                                     <InputGroup>
                                             <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>Beats per measure</i></InputGroup.Text>
-                                            <Form.Control type="number" value={this.props.song.timeSignature} className="timeSignature"/>
+                                            <Form.Control type="number" value={this.props.song.timeSignature} onChange={this.props.song.changeTimeSignature} className="timeSignature"/>
                                         </InputGroup>
                                     </Col>
                                     <Divider />

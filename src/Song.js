@@ -18,8 +18,17 @@ export default class Song {
         this.app.setState({ song: this });
     }
 
+    changeTimeSignature = (event) => {
+        var newSig = event.target.value;
+        var validSig = this.timeSignature;
+        if (!isNaN(newSig)) { validSig = newSig; }
+        if (validSig < 1) (validSig = 1);
+
+        this.timeSignature = validSig;
+        this.app.setState({ song: this });
+    }
+
     changeName = (event) => {
-        console.log(event.target.value);
         this.name = event.target.value;
         this.app.setState({ song: this });
     }

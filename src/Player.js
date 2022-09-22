@@ -4,13 +4,17 @@ export default class Player {
         this.volume = 50;
         this.audioContext = app.audioContext;
 
-        this.beatsToPixels = 40;
+        this.beatsToPixels = 80;
         this.subdivisions = 4;
         this.gridValue = "1/4";
     }
 
     play = (note) => {
         this.app.clavinet.play(note);
+    }
+
+    zoom = (amount) => {
+
     }
 
     changeGrid = (event) => {
@@ -31,7 +35,6 @@ export default class Player {
     }
 
     changeVolume = (event) => {
-        console.log(event.target.value);
         this.volume = event.target.value;
         this.app.setState({ player: this });
     }
