@@ -9,18 +9,35 @@ import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 export const LButton = styled(bButton)`
     overflow: hidden;
 
-    box-shadow: 0 0 10px ${props => props.lit ? `${props.color}8` : `${props.color}0`};
-
-    color: ${props => props.color};
-    background-color: ${props => props.background};
+    &, &:focus {
+        color: ${props => props.color};
+        background-color: ${props => props.background};
+        border-color: ${props => props.lit ? `#0004` : `#0000`};
+        box-shadow: ${props => props.lit 
+            ? `inset 0 0 10px #0004, 0 0 10px ${props.overBackground}8`
+            : `inset 0 0 10px #0000, 0 0 10px ${props.overColor}0`};
+    }
 
     &:hover, &:hover:focus {
         color: ${props => props.overColor};
-        background-color: ${props => props.background};
-
+        background-color: ${props => props.overBackground};
+        border-color: #0003;
+        box-shadow: ${props => props.lit 
+            ? `inset 0 0 10px #0004, 0 0 10px ${props.overBackground}`
+            : `inset 0 0 10px #0004, 0 0 10px ${props.overColor}2`};
+        
         & svg {
-            filter: drop-shadow(0 0 5px ${props => props.overColor}b);
+            ${props => props.lit 
+            ? `filter: drop-shadow(0 0 5px ${props.overColor}0);`
+            : `filter: drop-shadow(0 0 5px ${props.overColor}8);`
+            }
         }
+    }
+
+    &:active, &:hover:active, &:hover:focus:active {        
+        ${props => props.lit 
+        ? `background-color: ${props.overBackground}a;`
+        : `border-color: ${props.overColor}8;`}
     }
 `
 
@@ -48,13 +65,11 @@ export const IconButtonContainer = styled(LButton)`
 	font-size: 1.5em;
     width:40px;
     height:40px;
-    box-shadow: inset 0 0 10px #0003;
     
     &.btn-lg {
         height: 80px;
         width: 80px;
         font-size: 4em;
-        box-shadow: inset 0 0 30px #0003;
     }    
 `
 
@@ -65,37 +80,53 @@ height:80px;
 `
 
 export const IconButton = function IconButton(props) {
-    let themeColor = '#ccc';
-    let overColor = '#fff';
+    let litColor = '#ccc'
+    let litColorOver = '#fff';
+    let unlitColor = '#333';
+    let unlitColorOver = '#fff';
     let showBackground = false;
 
     if (props.variant) {
         switch(props.variant) {
             case 'green':
-                themeColor = '#0b4';
-                overColor = '#0e4';
+                litColor = '#0b4';
+                litColorOver = '#0e4';
                 break;
             case 'red':
-                themeColor = '#b10';
-                overColor = '#e10';
+                litColor = '#b10';
+                litColorOver = '#e10';
                 break;
             case 'yellow':
-                themeColor = '#fb0';
-                overColor = '#fb0';
+                litColor = '#fb0';
+                litColorOver = '#fb0';
                 break;
             case 'blue':
-                themeColor = '#39e';
-                overColor = '#7be';
+                litColor = '#39e';
+                litColorOver = '#7be';
                 break;
         }
         showBackground = true;
     }
 
-    let color = themeColor;
-    let background = `${themeColor}${showBackground?2:0}`;
+    let color = litColor;
+    let overColor = litColorOver;
+    let background = `${showBackground?litColor:unlitColor}${showBackground?2:0}`;
+    let overBackground = `${litColorOver}${showBackground?4:2}`;
+
+    if (props.lit) {
+        color = unlitColor;
+        overColor = unlitColor;
+        if (props.size === 'lg') {
+            color = `#222`;
+            overColor = `${unlitColor}c`;
+        }
+        background = litColor;
+        overBackground = litColorOver;
+    } 
 
     return (
-        <IconButtonContainer size={props.size} overColor={overColor} color={color} background={background} onClick={props.onClick} lit={false}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer color={color} overColor={overColor} background={background} overBackground={overBackground} 
+        onClick={props.onClick} size={props.size} lit={props.lit}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 

@@ -59,7 +59,7 @@ border-radius: 2px;
 	color: #ccc;
 }
 .btn, .btn svg {
-	transition: color .05s, background-color .2s, border-color .2s, border-width .2s, box-shadow .5s, text-shadow .5s, filter .1s;
+	transition: all .2s, border-color .05s;
 }
 .btn:disabled {
 	background-color: #fff0;

@@ -33,12 +33,15 @@ class App extends React.Component {
             player: new Player(this),
             mouse: {
                 left: false
-            }
+            },
+            tool: "add"
         };
     }
 
     SetTooltip = (text) => { this.setState({ tooltip:text }); }
     UnsetTooltip = () => {this.setState({ tooltip:"Orchestrion Roll" });}
+
+    SetTool = (tool) => { this.setState({tool:tool})};
 
     MouseDown = () => {this.setState({ mouse: { left: true } })}
     MouseUp = () => {this.setState({ mouse: { left: false } })}
@@ -54,7 +57,7 @@ class App extends React.Component {
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Header />
-                        <Toolbar song={this.state.song} player={this.state.player} />
+                        <Toolbar song={this.state.song} player={this.state.player} tool={this.state.tool} SetTool={this.SetTool}/>
                         <Sequencer player={this.state.player} song={this.state.song} mouse={this.state.mouse}/>
                         <Footer tooltip={this.state.tooltip} song={this.state.song} player={this.state.player}/>
                     </Container>

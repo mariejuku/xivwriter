@@ -27,6 +27,7 @@ class Toolbar extends React.Component {
     render() {
         var song = this.props.song;
         var player = this.props.player;
+        var props = this.props;
         return (
                 <Row>
                     <Col xs="auto">
@@ -35,9 +36,6 @@ class Toolbar extends React.Component {
                                 console.log("clikc");
                                 player.play();
                             }}/>
-                            <IconButton variant="red" icon={faPlayCircle} size="lg" />
-                            <IconButton variant="yellow" icon={faPlayCircle} size="lg" />
-                            <IconButton variant="blue" icon={faPlayCircle} size="lg" />
                             <SliderButton icon={faGear} />
                             <SliderButton icon={faCaretRight} />
                             <Col xs="auto">
@@ -60,9 +58,9 @@ class Toolbar extends React.Component {
                                     </Col>
                                 </Stack>
                                 <Stack direction="horizontal" gap={0}>
-                                    <IconButton icon={faEdit} />
-                                    <IconButton icon={faMousePointer} />
-                                    <IconButton icon={faEraser} />
+                                    <IconButton icon={faEdit} lit={props.tool === "edit"} onClick={() => {props.SetTool("edit")}}/>
+                                    <IconButton icon={faMousePointer} lit={props.tool === "select"} onClick={() => {props.SetTool("select")}}/>
+                                    <IconButton icon={faEraser} lit={props.tool === "eraser"} onClick={() => {props.SetTool("eraser")}}/>
                                     <Divider />
                                     <IconButton icon={faCopy} />
                                     <IconButton icon={faCut} />
