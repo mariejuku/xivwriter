@@ -1,54 +1,109 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import React from 'react';
 import Soundfont from 'soundfont-player';
-//import './soundfont/ffxiv-fixed/electric_guitar_muted-ogg';
-
-//require('./electric_guitar_clean-mp3');
-//console.log(MIDI.Soundfont.electric_guitar_clean);
-import Player from './Player';
+import Editor from './Editor';
 import Song from './Song';
 
-import { Container, Row, Col } from './layout/layout';
+import { H1 } from './layout/page';
+import { Container, Row as LRow, Col } from './layout/layout';
+import { Button, IconButton, IconButtonContainer, SliderButton, Divider, ImageButtonContainer, ImageButton } from './layout/controls'
+import { faPlayCircle, faYinYang } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import Header from './header';
 import Footer from './footer';
 import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
+import Flyout from "./flyout";
+
+const rotate = keyframes`
+  from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}`;
+
+const Spinner = styled(FontAwesomeIcon)`
+    width:80px;
+    height:80px;
+    color:#ccc;
+    filter: drop-shadow(0 0 5px #fff4);
+    animation: ${rotate} .5s linear infinite;
+`
+
+const LauncherDiv = styled.div`
+        position:fixed;
+        width:100%;
+        height:100%;
+        background: #2224;
+        display:inline-flex;
+        box-shadow: inset 0 0 1080px #000f;
+        justify-content:center;
+        align-items:center;
+
+        & ${IconButtonContainer} {
+            width:100%;
+            height:100%;
+        }
+    `;
+
+
+
+const Launcher = props => {
+    return (
+        <LauncherDiv>
+            {props.loadingState === 'unloaded'
+                ? <IconButton icon={faPlayCircle} size="lg" onClick={props.onClick} />
+                : <Spinner icon={faYinYang} />
+            }
+        </LauncherDiv>);
+}
 
 class App extends React.Component {
-
     constructor(props) {
         super(props);
-
-        this.audioContext = new AudioContext();
         this.clavinet = undefined;
-        this.AppStartup();
+
+        this.tools = {
+            "edit": {
+                cursor: "default"
+            }
+        }
 
         this.state = {
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
             song: new Song(this),
-            player: new Player(this),
+            editor: new Editor(this),
             mouse: {
                 left: false
             },
-            tool: "add"
+            tool: "edit"
         };
     }
 
-    SetTooltip = (text) => { this.setState({ tooltip:text }); }
-    UnsetTooltip = () => {this.setState({ tooltip:"Orchestrion Roll" });}
+    SetTooltip = (text) => { this.setState({ tooltip: text }); }
+    UnsetTooltip = () => { this.setState({ tooltip: "Orchestrion Roll" }); }
 
-    SetTool = (tool) => { this.setState({tool:tool})};
+    SetTool = (tool) => { this.setState({ tool: tool }) };
 
-    MouseDown = () => {this.setState({ mouse: { left: true } })}
-    MouseUp = () => {this.setState({ mouse: { left: false } })}
-    resize = (event) => { console.log(event); event.preventDefault();}
+    MouseDown = () => { this.setState({ mouse: { left: true } }) }
+    MouseUp = () => { this.setState({ mouse: { left: false } }) }
+    resize = (event) => { console.log(event); event.preventDefault(); }
 
     componentDidMount() {
         window.addEventListener("resize", this.resize.bind(this));
+    }
+
+    sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
+    Load = async () => {
+        this.setState({ loadingState: 'loading' });
+
+        this.audioContext = new AudioContext();
+        this.clavinet = await Soundfont.instrument(this.audioContext, 'http://localhost:3000/instruments/electric_guitar_clean-mp3.js');
+
+        this.setState({ loadingState: 'loaded' });
     }
 
     render() {
@@ -57,20 +112,21 @@ class App extends React.Component {
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Header />
-                        <Toolbar song={this.state.song} player={this.state.player} tool={this.state.tool} SetTool={this.SetTool}/>
-                        <Sequencer player={this.state.player} song={this.state.song} mouse={this.state.mouse}/>
-                        <Footer tooltip={this.state.tooltip} song={this.state.song} player={this.state.player}/>
+                        <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
+                        <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
+                        <Footer tooltip={this.state.tooltip} song={this.state.song} editor={this.state.editor} />
                     </Container>
+                    <Flyout>
+                        <ImageButton></ImageButton>
+                    </Flyout>
                 </div>
+                {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>
         );
     }
-
-    async AppStartup() {
-        this.clavinet = await Soundfont.instrument(this.audioContext, 'http://localhost:3000/instruments/electric_guitar_clean-mp3.js');
-        console.log(this.clavinet);
-    }
 }
+
+
 
 export default App;
 

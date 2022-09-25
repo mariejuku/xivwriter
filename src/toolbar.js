@@ -13,8 +13,6 @@ box-shadow:inset 0 0 6px #000000;
 background:#fff2;
 `
 
-
-
 class Toolbar extends React.Component {
     constructor(props) {
         super(props);
@@ -34,7 +32,8 @@ class Toolbar extends React.Component {
                         <Stack direction="horizontal" gap={0}>
                             <IconButton variant="green" icon={faPlayCircle} size="lg" onClick={function() {
                                 console.log("clikc");
-                                player.play();
+                                //player.play();
+                                song.testPlay();
                             }}/>
                             <SliderButton icon={faGear} />
                             <SliderButton icon={faCaretRight} />

@@ -26,7 +26,7 @@ overflow:hidden;
 const CanvasPanel = styled(Col)`
 position:relative;
 `
-
+        
 class Sequencer extends React.Component {
     constructor(props) {
         super(props);
@@ -37,10 +37,10 @@ class Sequencer extends React.Component {
     }
 
     onCanvasClick = (event, pos, canvas) => {
-        let player = this.props.player;
-        let beat = pos.x/player.beatsToPixels;
-        let quantizedBeat = Math.floor(beat*player.subdivisions) / player.subdivisions;
-        //let beat = Math.floor(measure*player.subdivisions);
+        let editor = this.props.editor;
+        let beat = pos.x/editor.beatsToPixels;
+        let quantizedBeat = Math.floor(beat*editor.subdivisions) / editor.subdivisions;
+        //let beat = Math.floor(measure*editor.subdivisions);
         //console.log(`measure ${measure}`);
         console.log(`beat ${quantizedBeat}`);
         
@@ -51,7 +51,7 @@ class Sequencer extends React.Component {
     }
 
     render() {
-        let measureWidth = this.props.player.beatsToPixels * this.props.song.timeSignature;
+        let measureWidth = this.props.editor.beatsToPixels * this.props.song.timeSignature;
         
         return (
                 <>
@@ -73,15 +73,15 @@ class Sequencer extends React.Component {
                     <CanvasPanel xs="2" style={{width:"120px"}}>
                         <PianoRoll>
                             <Stack direction="vertical" gap={0}>
-                                <PianoKey number={6} name="C" mouse={this.props.mouse} player={this.props.player}></PianoKey>
-                                <PianoOctave octaveNumber={5} mouse={this.props.mouse} player={this.props.player}/>
-                                <PianoOctave octaveNumber={4} mouse={this.props.mouse} player={this.props.player}/>
-                                <PianoOctave octaveNumber={3} mouse={this.props.mouse} player={this.props.player}/>
+                                <PianoKey number={6} name="C" mouse={this.props.mouse} editor={this.props.editor}></PianoKey>
+                                <PianoOctave octaveNumber={5} mouse={this.props.mouse} editor={this.props.editor}/>
+                                <PianoOctave octaveNumber={4} mouse={this.props.mouse} editor={this.props.editor}/>
+                                <PianoOctave octaveNumber={3} mouse={this.props.mouse} editor={this.props.editor}/>
                             </Stack>
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas onCanvasClick={this.onCanvasClick} song={this.props.song} player={this.props.player}/>
+                        <SequencerCanvas onCanvasClick={this.onCanvasClick} song={this.props.song} editor={this.props.editor}/>
                     </CanvasPanel>
                 </SequenceRow>
                 </>

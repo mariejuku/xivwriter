@@ -1,8 +1,143 @@
 
 const instruments = {
-    harp:{
+    Harp:{
         name:"Harp",
         character:"acoustic",
+        range:0
+    },
+    Piano:{
+        name:"Piano",
+        character:"acoustic",
+        range:1
+    },
+    Lute:{
+        name:"Lute",
+        character:"acoustic",
+        range:-1
+    },
+    Fiddle:{
+        name:"Fiddle",
+        character:"acoustic",
+        range:-1
+    },
+    Flute:{
+        name:"Flute",
+        character:"wind",
+        range:1
+    },
+    Oboe:{
+        name:"Oboe",
+        character:"wind",
+        range:1
+    },
+    Clarinet:{
+        name:"Clarinet",
+        character:"wind",
+        range:1
+    },
+    Fife:{
+        name:"Fife",
+        character:"wind",
+        range:2
+    },
+    Panpipes:{
+        name:"Panpipes",
+        character:"wind",
+        range:1
+    },
+    Timpani:{
+        name:"Timpani",
+        character:"percussion",
+        range:-1
+    },
+    Bongo:{
+        name:"Bongo",
+        character:"percussion",
+        range:-1
+    },
+    BassDrum:{
+        name:"Bass Drum",
+        character:"percussion",
+        range:-2
+    },
+    SnareDrum:{
+        name:"Snare Drum",
+        character:"percussion",
+        range:0
+    },
+    Cymbal:{
+        name:"Cymbal",
+        character:"percussion",
+        range:0
+    },
+    Trumpet:{
+        name:"Trumpet",
+        character:"brass",
+        range:0
+    },
+    Trombone:{
+        name:"Trombone",
+        character:"brass",
+        range:-1
+    },
+    Tuba:{
+        name:"Tuba",
+        character:"brass",
+        range:-2
+    },
+    Horn:{
+        name:"Horn",
+        character:"brass",
+        range:-1
+    },
+    Saxophone:{
+        name:"Saxophone",
+        character:"wind",
+        range:0
+    },
+    Violin:{
+        name:"Violin",
+        character:"string",
+        range:0
+    },
+    Viola:{
+        name:"Viola",
+        character:"string",
+        range:0
+    },
+    Cello:{
+        name:"Cello",
+        character:"string",
+        range:-1
+    },
+    DoubleBass:{
+        name:"Double Bass",
+        character:"string",
+        range:-2
+    },
+    ECOverdriven:{
+        name:"Electric Guitar (Overdriven)",
+        character:"electric",
+        range:0
+    },
+    ECClean:{
+        name:"Electric Guitar (Clean)",
+        character:"electric",
+        range:0
+    },
+    ECMuted:{
+        name:"Electric Guitar (Muted)",
+        character:"electric",
+        range:0
+    },
+    ECPowerChords:{
+        name:"Electric Guitar (Power Chords)",
+        character:"electric",
+        range:0
+    },
+    ECSpecial:{
+        name:"Electric Guitar (Special)",
+        character:"electric",
         range:0
     },
 }

@@ -68,11 +68,11 @@ const SequencerCanvas = props => {
     }
 
     const drawMeasures = function(ctx,canvas, props) {
-        let subdivisions = props.player.subdivisions;
-        let subWidth = props.player.beatsToPixels / subdivisions;
+        let subdivisions = props.editor.subdivisions;
+        let subWidth = props.editor.beatsToPixels / subdivisions;
         let beatsPerMeasure = props.song.timeSignature;
-        let beatWidth = props.player.beatsToPixels;
-        let measureWidth = props.player.beatsToPixels * beatsPerMeasure;
+        let beatWidth = props.editor.beatsToPixels;
+        let measureWidth = props.editor.beatsToPixels * beatsPerMeasure;
         //sub-beat
         if (subdivisions <= 16){
             ctx.strokeStyle = '#0002';

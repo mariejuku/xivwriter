@@ -6,38 +6,40 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 
+import image from '../icons/bassDrum.png';
+
 export const LButton = styled(bButton)`
     overflow: hidden;
 
     &, &:focus {
         color: ${props => props.color};
         background-color: ${props => props.background};
-        border-color: ${props => props.lit ? `#0004` : `#0000`};
-        box-shadow: ${props => props.lit 
-            ? `inset 0 0 10px #0004, 0 0 10px ${props.overBackground}8`
-            : `inset 0 0 10px #0000, 0 0 10px ${props.overColor}0`};
+        border-color: ${props => props.$lit ? `#0004` : `#0000`};
+        box-shadow: ${props => props.$lit 
+            ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}8`
+            : `inset 0 0 10px #0000, 0 0 10px ${props.$overColor}0`};
     }
 
     &:hover, &:hover:focus {
-        color: ${props => props.overColor};
-        background-color: ${props => props.overBackground};
+        color: ${props => props.$overColor};
+        background-color: ${props => props.$overBackground};
         border-color: #0003;
-        box-shadow: ${props => props.lit 
-            ? `inset 0 0 10px #0004, 0 0 10px ${props.overBackground}`
-            : `inset 0 0 10px #0004, 0 0 10px ${props.overColor}2`};
+        box-shadow: ${props => props.$lit 
+            ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}`
+            : `inset 0 0 10px #0004, 0 0 10px ${props.$overColor}2`};
         
         & svg {
-            ${props => props.lit 
-            ? `filter: drop-shadow(0 0 5px ${props.overColor}0);`
-            : `filter: drop-shadow(0 0 5px ${props.overColor}8);`
+            ${props => props.$lit 
+            ? `filter: drop-shadow(0 0 5px ${props.$overColor}0);`
+            : `filter: drop-shadow(0 0 5px ${props.$overColor}8);`
             }
         }
     }
 
     &:active, &:hover:active, &:hover:focus:active {        
-        ${props => props.lit 
-        ? `background-color: ${props.overBackground}a;`
-        : `border-color: ${props.overColor}8;`}
+        ${props => props.$lit 
+        ? `background-color: ${props.$overBackground}a;`
+        : `border-color: ${props.$overColor}8;`}
     }
 `
 
@@ -55,7 +57,7 @@ export const Button = props => {
     }
 
     return (
-        <LButton color={color} overColor={overColor} background="#ahh" showBackground={showBackground}>{props.children}</LButton>
+        <LButton color={color} $overColor={overColor} background="#ahh" showBackground={showBackground}>{props.children}</LButton>
     );
 }
 
@@ -84,7 +86,7 @@ export const IconButton = function IconButton(props) {
     let litColorOver = '#fff';
     let unlitColor = '#333';
     let unlitColorOver = '#fff';
-    let showBackground = false;
+    let showBackground = props.showBackground;
 
     if (props.variant) {
         switch(props.variant) {
@@ -125,8 +127,8 @@ export const IconButton = function IconButton(props) {
     } 
 
     return (
-        <IconButtonContainer color={color} overColor={overColor} background={background} overBackground={overBackground} 
-        onClick={props.onClick} size={props.size} lit={props.lit}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer color={color} $overColor={overColor} background={background} $overBackground={overBackground} 
+        onClick={props.onClick} size={props.size} $lit={props.lit}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 
@@ -135,7 +137,6 @@ export const SliderButton = function SliderButton(props) {
         <SlideButtonContainer variant={props.variant} size={props.size}><FontAwesomeIcon icon={props.icon} /></SlideButtonContainer>
     );
 }
-
 
 export function Divider() {
     return (
@@ -169,3 +170,25 @@ export const Text = props => {
         </Row>
     );
 }
+
+export const ImageButtonContainer = styled(LButton)`
+    padding: .5em !important;
+	line-height: 0;
+	font-size: 1.5em;
+    width:100%;
+    height:auto;
+`
+
+export const ImageButton = props => {
+    return (
+        <ImageButtonContainer>
+            <Row>
+                <Col xs="auto">
+                    <img src={image}/>
+                </Col>
+                <Col>content</Col>
+            </Row>
+        </ImageButtonContainer>
+    );
+}
+

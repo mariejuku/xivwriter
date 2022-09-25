@@ -1,10 +1,67 @@
+import MidiPlayer from 'midi-player-js';
+import MidiWriter from 'midi-writer-js';
+import Soundfont from 'soundfont-player';
+
+export class Track {
+    constructor(song) {
+        console.log("new track");
+
+        this.song = song;
+        this.midiTrack = new MidiWriter.Track();
+        this.midiTrack.addInstrumentName("clavinet");
+
+        // Add some notes:
+        const note = new MidiWriter.NoteEvent({ pitch: ['C4', 'D4', 'E4'], duration: '4' });
+        this.midiTrack.addEvent(note);
+
+        this.midiTrack.addEvent([
+            new MidiWriter.NoteEvent({ pitch: ['E4', 'D4'], duration: '4' }),
+            new MidiWriter.NoteEvent({ pitch: ['C4'], duration: '2' }),
+            new MidiWriter.NoteEvent({ pitch: ['E4', 'D4'], duration: '4' }),
+            new MidiWriter.NoteEvent({ pitch: ['C4'], duration: '2' }),
+            new MidiWriter.NoteEvent({ pitch: ['C4', 'C4', 'C4', 'C4', 'D4', 'D4', 'D4', 'D4'], duration: '8' }),
+            new MidiWriter.NoteEvent({ pitch: ['E4', 'D4'], duration: '4' }),
+            new MidiWriter.NoteEvent({ pitch: ['C4'], duration: '2' })
+        ], function (event, index) {
+            return { sequential: true };
+        });
+        // Generate a data URI
+        this.write = new MidiWriter.Writer(this.midiTrack);
+        
+    }
+}
+
 export default class Song {
     constructor(app) {
         this.app = app;
+        console.log(this.app);
 
         this.name = "song";
         this.bpm = 100;
         this.timeSignature = 4; //beats per measure
+
+        this.tracks = {
+            clavinet: new Track(this)
+        };
+    }
+
+    testPlay = (event) => {
+        // Initialize player and register event handler
+        console.log(this.app);
+        console.log(this.app.clavinet);
+        console.log(MidiPlayer);
+        console.log(MidiPlayer.Player);
+        const note = this.app.clavinet.play;
+        const Player = new MidiPlayer.Player(function (event) {
+            console.log(event);
+            note(event.noteName);
+        });
+
+        // Load a MIDI file
+        const dataUri = this.tracks.clavinet.write.dataUri();
+        console.log(dataUri);
+        Player.loadDataUri(dataUri);
+        Player.play();
     }
 
     changeBPM = (event) => {
