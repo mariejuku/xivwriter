@@ -7,7 +7,7 @@ import Editor from './Editor';
 import Song from './Song';
 
 import { H1 } from './layout/page';
-import { Container, Row as LRow, Col } from './layout/layout';
+import { Container, Col } from './layout/layout';
 import { Button, IconButton, IconButtonContainer, SliderButton, Divider, ImageButtonContainer, ImageButton } from './layout/controls'
 import { faPlayCircle, faYinYang } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,6 +18,14 @@ import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
 import Flyout from "./flyout";
+
+const Row = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: stretch;
+align-content: stretch;
+flex-grow: ${props => props.$grow ? 1 : 0};
+`;
 
 const rotate = keyframes`
   from {transform: rotate(0deg);}
@@ -32,22 +40,20 @@ const Spinner = styled(FontAwesomeIcon)`
 `
 
 const LauncherDiv = styled.div`
-        position:fixed;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background: #2224;
+    display:inline-flex;
+    box-shadow: inset 0 0 1080px #000f;
+    justify-content:center;
+    align-items:center;
+
+    & ${IconButtonContainer} {
         width:100%;
         height:100%;
-        background: #2224;
-        display:inline-flex;
-        box-shadow: inset 0 0 1080px #000f;
-        justify-content:center;
-        align-items:center;
-
-        & ${IconButtonContainer} {
-            width:100%;
-            height:100%;
-        }
-    `;
-
-
+    }
+`;
 
 const Launcher = props => {
     return (
@@ -111,14 +117,25 @@ class App extends React.Component {
             <>
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
-                        <Header />
-                        <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
-                        <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
-                        <Footer tooltip={this.state.tooltip} song={this.state.song} editor={this.state.editor} />
+                        <Row $grow={true}>
+                        <Col>
+                            <Header />
+                            <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
+                            <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
+                        </Col>
+                        <Col>
+                        Sidebar
+                        </Col>
+                        </Row>
+                        <Row >
+                            <Col>
+                                <Footer tooltip={this.state.tooltip} song={this.state.song} editor={this.state.editor} />
+                            </Col>
+                        </Row>
                     </Container>
-                    <Flyout>
+                    {/* <Flyout>
                         <ImageButton></ImageButton>
-                    </Flyout>
+                    </Flyout> */}
                 </div>
                 {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>

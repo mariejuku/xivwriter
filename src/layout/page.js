@@ -9,13 +9,17 @@ flex-direction:column;
 flex-grow:1;
 `
 export const Row = styled(bRow)`
+display:flex;
 margin-left:0;
 margin-right:0;
 flex-grow:0;
+flex-direction:row;
 `
 export const Col = styled(bCol)`
+display:flex;
 padding-left:0;
 padding-right:0;
+flex-direction:column;
 `
 
 export const Form = {
