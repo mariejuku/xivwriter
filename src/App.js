@@ -6,7 +6,7 @@ import Soundfont from 'soundfont-player';
 import Editor from './Editor';
 import Song from './Song';
 
-import { H1 } from './layout/page';
+import { H1, Overlay } from './layout/page';
 import { Container, Col } from './layout/layout';
 import { Button, IconButton, IconButtonContainer, SliderButton, Divider, ImageButtonContainer, ImageButton } from './layout/controls'
 import { faPlayCircle, faYinYang } from '@fortawesome/free-solid-svg-icons'
@@ -17,7 +17,7 @@ import Footer from './footer';
 import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
-import Flyout from "./flyout";
+import { Flyout, Shelf, Sidebar } from "./flyout";
 
 const Row = styled.div`
 display: flex;
@@ -118,24 +118,26 @@ class App extends React.Component {
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Row $grow={true}>
-                        <Col>
+                        <Col xs={12}>
                             <Header />
                             <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
                             <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
                         </Col>
                         <Col>
-                        Sidebar
+                        <Sidebar>
+                            Sidebar
+                        </Sidebar>
                         </Col>
                         </Row>
-                        <Row >
+                        <Row>
                             <Col>
                                 <Footer tooltip={this.state.tooltip} song={this.state.song} editor={this.state.editor} />
                             </Col>
                         </Row>
                     </Container>
-                    {/* <Flyout>
+                    <Flyout open={false}>
                         <ImageButton></ImageButton>
-                    </Flyout> */}
+                    </Flyout>
                 </div>
                 {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>
