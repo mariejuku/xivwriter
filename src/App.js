@@ -9,7 +9,7 @@ import Song from './Song';
 import { H1, Overlay } from './layout/page';
 import { Container, Col } from './layout/layout';
 import { Button, IconButton, IconButtonContainer, SliderButton, Divider, ImageButtonContainer, ImageButton } from './layout/controls'
-import { faPlayCircle, faYinYang } from '@fortawesome/free-solid-svg-icons'
+import { faPlayCircle, faYinYang, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import Header from './header';
@@ -79,6 +79,8 @@ class App extends React.Component {
         this.state = {
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
+            sidebarOpen: false,
+            flyoutOpen: false,
             song: new Song(this),
             editor: new Editor(this),
             mouse: {
@@ -96,6 +98,9 @@ class App extends React.Component {
     MouseDown = () => { this.setState({ mouse: { left: true } }) }
     MouseUp = () => { this.setState({ mouse: { left: false } }) }
     resize = (event) => { console.log(event); event.preventDefault(); }
+
+    SetSidebar = (open) => { this.setState({ sidebarOpen: open }) };
+    ToggleSidebar = () => { this.SetSidebar(!this.state.sidebarOpen) };
 
     componentDidMount() {
         window.addEventListener("resize", this.resize.bind(this));
@@ -118,16 +123,23 @@ class App extends React.Component {
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Row $grow={true}>
-                        <Col xs={12}>
-                            <Header />
-                            <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
-                            <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
-                        </Col>
-                        <Col>
-                        <Sidebar>
-                            Sidebar
-                        </Sidebar>
-                        </Col>
+                            <Col xs={this.state.sidebarOpen ? 6 : 12}>
+                                <Row $grow={true}>
+                                    <Col>
+                                        <Header />
+                                        <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
+                                        <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
+                                    </Col>
+                                    <Col xs={"auto"}>
+                                        <SliderButton leftHand onChange={this.ToggleSidebar} open={this.state.sidebarOpen} />
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Sidebar>
+                                    Sidebar
+                                </Sidebar>
+                            </Col>
                         </Row>
                         <Row>
                             <Col>
@@ -135,7 +147,7 @@ class App extends React.Component {
                             </Col>
                         </Row>
                     </Container>
-                    <Flyout open={false}>
+                    <Flyout open={this.state.flyoutOpen}>
                         <ImageButton></ImageButton>
                     </Flyout>
                 </div>

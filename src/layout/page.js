@@ -7,6 +7,7 @@ padding:0;
 display:flex;
 flex-direction:column;
 flex-grow:1;
+overflow:hidden;
 `
 export const Row = styled(bRow)`
 display:flex;
@@ -14,12 +15,14 @@ margin-left:0;
 margin-right:0;
 flex-grow:0;
 flex-direction:row;
+transition:all .5s;
 `
 export const Col = styled(bCol)`
 display:flex;
 padding-left:0;
 padding-right:0;
 flex-direction:column;
+transition:all .5s;
 `
 
 export const Overlay = styled.div`

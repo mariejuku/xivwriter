@@ -4,7 +4,7 @@ import { Button as bButton } from 'react-bootstrap';
 import { Row, Col } from './layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCaretLeft, faCaretRight, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 
 import image from '../icons/bassDrum.png';
 
@@ -78,7 +78,7 @@ export const IconButtonContainer = styled(LButton)`
 export const SlideButtonContainer = styled(IconButtonContainer)`
 font-size:1em;
 width:20px;
-height:80px;
+height:100%;
 `
 
 export const IconButton = function IconButton(props) {
@@ -133,8 +133,18 @@ export const IconButton = function IconButton(props) {
 }
 
 export const SliderButton = function SliderButton(props) {
+    let leftHand = false;
+    if (props.leftHand != undefined) { leftHand = props.leftHand; }
+
+    let open = false;
+    if (props.open != undefined) { open = props.open; }
+
+    let icon = (leftHand ? !open : open) ? faCaretLeft : faCaretRight;
+
+    if (props.icon != undefined) { icon = props.icon; }
+    
     return (
-        <SlideButtonContainer variant={props.variant} size={props.size}><FontAwesomeIcon icon={props.icon} /></SlideButtonContainer>
+        <SlideButtonContainer variant={props.variant} size={props.size} onClick={props.onChange}><FontAwesomeIcon icon={icon} /></SlideButtonContainer>
     );
 }
 
