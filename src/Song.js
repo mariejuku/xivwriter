@@ -1,12 +1,15 @@
 import MidiPlayer from 'midi-player-js';
 import MidiWriter from 'midi-writer-js';
 import Soundfont from 'soundfont-player';
+import instruments from './instruments';
 
 export class Track {
     constructor(song) {
         console.log("new track");
 
         this.song = song;
+        this.name = "track 01";
+        this.instrument = instruments.Clarinet;
         this.midiTrack = new MidiWriter.Track();
         this.midiTrack.addInstrumentName("clavinet");
 
@@ -40,9 +43,16 @@ export default class Song {
         this.bpm = 100;
         this.timeSignature = 4; //beats per measure
 
-        this.tracks = {
-            clavinet: new Track(this)
-        };
+        this.tracks = [
+            new Track(this),
+            new Track(this),
+            new Track(this),
+            new Track(this),
+            new Track(this),
+            new Track(this),
+            new Track(this),
+            new Track(this)
+        ];
     }
 
     testPlay = (event) => {

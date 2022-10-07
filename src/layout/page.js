@@ -39,7 +39,8 @@ export const Form = {
     Label: styled(bForm.Label)``,
     Range: styled(bForm.Range)`
     width:160px;
-    `
+    `,
+    Switch: styled(bForm.Switch)``
 }
 
 export const H1 = styled.h1`

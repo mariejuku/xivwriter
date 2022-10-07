@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Col, H1, Row } from "./layout/page";
+import { Col, Container, H1, Row } from "./layout/page";
 
 const FlyoutDiv = styled.div`
     transition:right .4s;
@@ -23,6 +23,8 @@ export const Shelf = styled.div`
     border-color: #0004;
     color: #ccc;
     box-shadow: inset 0 0 30px #0006, 0 0 10px #0008;
+    display:flex;
+    flex-direction:column;
 `;
 
 const Title = styled.div`
@@ -44,7 +46,7 @@ export const Flyout = props => {
     return (
         <FlyoutDiv $open={props.open}>
             <ButtonWindow>
-                        {props.children}
+                {props.children}
             </ButtonWindow>
         </FlyoutDiv>
     );
@@ -53,8 +55,8 @@ export const Flyout = props => {
 export const Sidebar = props => {
     return (
         <SidebarDiv>
-            <ButtonWindow>
-                        {props.children}
+            <ButtonWindow title={props.title}>
+                {props.children}
             </ButtonWindow>
         </SidebarDiv>
     );
@@ -63,10 +65,14 @@ export const Sidebar = props => {
 export const ButtonWindow = props => {
     return (
         <Shelf>
-            <Title>
-                <H1>Instruments</H1>
-            </Title>
             <Row>
+                <Col>
+                    <Title>
+                        <H1>{props.title}</H1>
+                    </Title>
+                </Col>
+            </Row>
+            <Row style={{ overflowY: "scroll" }}>
                 <Col>
                     {props.children}
                 </Col>

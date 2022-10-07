@@ -4,7 +4,7 @@ import './App.css';
 import React from 'react';
 import Soundfont from 'soundfont-player';
 import Editor from './Editor';
-import Song from './Song';
+import Song, { Track } from './Song';
 
 import { H1, Overlay } from './layout/page';
 import { Container, Col } from './layout/layout';
@@ -18,6 +18,7 @@ import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
 import { Flyout, Shelf, Sidebar } from "./flyout";
+import { TrackSettings } from "./TrackSettings";
 
 const Row = styled.div`
 display: flex;
@@ -79,7 +80,7 @@ class App extends React.Component {
         this.state = {
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
-            sidebarOpen: false,
+            sidebarOpen: true,
             flyoutOpen: false,
             song: new Song(this),
             editor: new Editor(this),
@@ -130,14 +131,16 @@ class App extends React.Component {
                                         <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
                                         <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
                                     </Col>
-                                    <Col xs={"auto"}>
+                                    <Col xs={"auto"} style={{zIndex:1}}>
                                         <SliderButton leftHand onChange={this.ToggleSidebar} open={this.state.sidebarOpen} />
                                     </Col>
                                 </Row>
                             </Col>
                             <Col>
-                                <Sidebar>
-                                    Sidebar
+                                <Sidebar title={"Tracks"}>
+                                {this.state.song.tracks.map((track, index) =>
+                                    <TrackSettings key={index} index={index} track={track}/>)
+                                }
                                 </Sidebar>
                             </Col>
                         </Row>

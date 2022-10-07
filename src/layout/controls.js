@@ -44,20 +44,53 @@ export const LButton = styled(bButton)`
 `
 
 export const Button = props => {
-    let color = '#c00';
-    let overColor = '#fff';
-    let background = '#c00';
-    let showBackground = true;
+    let litColor = '#ccc'
+    let litColorOver = '#fff';
+    let unlitColor = '#333';
+    let unlitColorOver = '#fff';
+    let showBackground = props.showBackground;
 
     if (props.variant) {
         switch(props.variant) {
             case 'green':
+                litColor = '#0b4';
+                litColorOver = '#0e4';
+                break;
+            case 'red':
+                litColor = '#b10';
+                litColorOver = '#e10';
+                break;
+            case 'yellow':
+                litColor = '#fb0';
+                litColorOver = '#fb0';
+                break;
+            case 'blue':
+                litColor = '#39e';
+                litColorOver = '#7be';
+                break;
         }
         showBackground = true;
     }
 
+    let color = litColor;
+    let overColor = litColorOver;
+    let background = `${showBackground?litColor:unlitColor}${showBackground?2:0}`;
+    let overBackground = `${litColorOver}${showBackground?4:2}`;
+
+    if (props.lit) {
+        color = unlitColor;
+        overColor = unlitColor;
+        if (props.size === 'lg') {
+            color = `#222`;
+            overColor = `${unlitColor}c`;
+        }
+        background = litColor;
+        overBackground = litColorOver;
+    } 
+
     return (
-        <LButton color={color} $overColor={overColor} background="#ahh" showBackground={showBackground}>{props.children}</LButton>
+        <LButton color={color} $overColor={overColor} background={background} $overBackground={overBackground} 
+        onClick={props.onClick} size={props.size} $lit={props.lit}>{props.children}</LButton>
     );
 }
 
@@ -194,9 +227,9 @@ export const ImageButton = props => {
         <ImageButtonContainer>
             <Row>
                 <Col xs="auto">
-                    <img src={image}/>
+                    <img src={props.image}/>
                 </Col>
-                <Col>content</Col>
+                <Col>{props.children}</Col>
             </Row>
         </ImageButtonContainer>
     );
