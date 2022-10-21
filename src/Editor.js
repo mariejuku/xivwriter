@@ -19,6 +19,10 @@ export default class Editor {
 
     }
 
+    OpenFlyout = () => {
+        this.app.OpenFlyout();
+    }
+
     changeGrid = (event) => {
         var oldGrid = this.subdivisions;
         var input = event.target.value.split('/')

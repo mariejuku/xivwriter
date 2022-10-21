@@ -66,6 +66,15 @@ const Launcher = props => {
         </LauncherDiv>);
 }
 
+const OverlayDiv = styled.div`
+    position:fixed;
+    width:100%;
+    height:100%;
+    background: #2221;
+    backdrop-filter: blur(5px);
+    display:inline-flex;
+`;
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -102,6 +111,8 @@ class App extends React.Component {
 
     SetSidebar = (open) => { this.setState({ sidebarOpen: open }) };
     ToggleSidebar = () => { this.SetSidebar(!this.state.sidebarOpen) };
+    OpenFlyout = (onComplete) => { console.log("open flyout")
+        this.setState({flyoutOpen:true}); }
 
     componentDidMount() {
         window.addEventListener("resize", this.resize.bind(this));
@@ -132,6 +143,9 @@ class App extends React.Component {
                                         <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
                                     </Col>
                                     <Col xs={"auto"} style={{zIndex:1}}>
+                                        <SliderButton onChange={this.OpenFlyout} open={this.state.flyoutOpen} />
+                                    </Col>
+                                    <Col xs={"auto"} style={{zIndex:1}}>
                                         <SliderButton leftHand onChange={this.ToggleSidebar} open={this.state.sidebarOpen} />
                                     </Col>
                                 </Row>
@@ -139,7 +153,7 @@ class App extends React.Component {
                             <Col>
                                 <Sidebar title={"Tracks"}>
                                 {this.state.song.tracks.map((track, index) =>
-                                    <TrackSettings key={index} index={index} track={track}/>)
+                                    <TrackSettings key={index} index={index} track={track} editor={this.state.editor} />)
                                 }
                                 </Sidebar>
                             </Col>
@@ -154,6 +168,7 @@ class App extends React.Component {
                         <ImageButton></ImageButton>
                     </Flyout>
                 </div>
+                <OverlayDiv/>
                 {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>
         );

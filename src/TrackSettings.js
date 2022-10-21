@@ -4,6 +4,7 @@ import { InputGroup } from "react-bootstrap";
 import styled from "styled-components";
 import { Col, Form, H1, Row } from "./layout/page";
 import { Button, IconButton, ImageButton } from './layout/controls';
+import Editor from './Editor';
 
 const TrackWindow = styled.div`
 padding:1em;
@@ -41,10 +42,14 @@ margin: 0;
 display: inline-block;
 `;
 
+const InstrumentButton = props => {
+    return (
+        <ImageButton image={props.instrument.image} variant="green" onClick={props.onClick}>{props.instrument.name}</ImageButton>
+    );
+}
+
 export const TrackSettings = props => {
     let track = props.track;
-
-    console.log(track);
 
     return (
         <Row>
@@ -55,10 +60,10 @@ export const TrackSettings = props => {
                             <TrackNumber>{props.index}</TrackNumber>
                         </TrackHandle>
                         <Col>
-                        <InputGroup>
+                            <InputGroup>
                                 <InputGroup.Text><i>Track Name</i></InputGroup.Text>
                                 <Form.Control value={track.name} placeholder="Track Name" />
-                                <IconButton icon={faEraser}/>
+                                <IconButton icon={faEraser} />
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Text><i>Instrument</i></InputGroup.Text>
@@ -66,7 +71,7 @@ export const TrackSettings = props => {
                                 <Button lit>Choose</Button>
                             </InputGroup>
                             Instrument
-                            <ImageButton image={track.instrument.image}>{track.instrument.name}</ImageButton>
+                            <InstrumentButton instrument={track.instrument} onClick={props.editor.OpenFlyout} />
                             <InputGroup>
                                 <InputGroup.Text><i>Export this track</i></InputGroup.Text>
                                 <Form.Switch></Form.Switch>
@@ -81,7 +86,6 @@ export const TrackSettings = props => {
                             </InputGroup>
                         </Col>
                     </Row>
-
                 </TrackWindow>
             </Col>
         </Row>

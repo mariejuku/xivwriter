@@ -224,7 +224,7 @@ export const ImageButtonContainer = styled(LButton)`
 
 export const ImageButton = props => {
     return (
-        <ImageButtonContainer>
+        <ImageButtonContainer onClick={props.onClick}>
             <Row>
                 <Col xs="auto">
                     <img src={props.image}/>

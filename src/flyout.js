@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { Col, Container, H1, Row } from "./layout/page";
 
@@ -42,14 +43,24 @@ position:relative;
 height:100%;
 `
 
-export const Flyout = props => {
-    return (
-        <FlyoutDiv $open={props.open}>
+export class Flyout extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            callback: null
+        }
+    }
+
+    render() {
+        return (
+            <FlyoutDiv $open={this.props.open}>
             <ButtonWindow>
-                {props.children}
+                {this.props.children}
             </ButtonWindow>
-        </FlyoutDiv>
-    );
+            </FlyoutDiv>
+        );
+    }
 }
 
 export const Sidebar = props => {
