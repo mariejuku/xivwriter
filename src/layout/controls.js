@@ -235,3 +235,8 @@ export const ImageButton = props => {
     );
 }
 
+export const InstrumentButton = props => {
+    return (
+        <ImageButton image={props.instrument.image} variant="green" onClick={props.onClick}>{props.instrument.name}</ImageButton>
+    );
+}

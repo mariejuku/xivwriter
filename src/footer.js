@@ -12,12 +12,10 @@ class Footer extends React.Component {
 
     render() {
         return (
-            
                 <Row>
                     <Col xs="auto">
                             <Stack direction="vertical" gap={0}>
                                 <Stack direction="horizontal" gap={0}>
-
                                 </Stack>
                                 <Stack direction="horizontal" gap={0}>
                                     <IconButton icon={faEdit} />
@@ -41,7 +39,7 @@ class Footer extends React.Component {
                                         </InputGroup>
                                     </Col>
                                     <Divider />
-                                    <Text>{this.props.tooltip}</Text>
+                                    <Text style={{zIndex:'100'}}>{this.props.tooltip}</Text>
                                 </Stack>
                             </Stack>
                     </Col>

@@ -19,8 +19,8 @@ export default class Editor {
 
     }
 
-    OpenFlyout = () => {
-        this.app.OpenFlyout();
+    OpenFlyout = (callback) => {
+        this.app.OpenFlyout(callback);
     }
 
     changeGrid = (event) => {

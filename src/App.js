@@ -8,7 +8,7 @@ import Song, { Track } from './Song';
 
 import { H1, Overlay } from './layout/page';
 import { Container, Col } from './layout/layout';
-import { Button, IconButton, IconButtonContainer, SliderButton, Divider, ImageButtonContainer, ImageButton } from './layout/controls'
+import { Button, IconButton, IconButtonContainer, SliderButton, InstrumentButton, ImageButtonContainer, ImageButton } from './layout/controls'
 import { faPlayCircle, faYinYang, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -18,7 +18,8 @@ import Toolbar from './toolbar';
 import Sequencer from "./sequencer";
 import instruments from "./instruments";
 import { Flyout, Shelf, Sidebar } from "./flyout";
-import { TrackSettings } from "./TrackSettings";
+import { TrackSettings } from "./Pages/TrackSettings";
+import { InstrumentSelect } from "./Pages/InstrumentSelect";
 
 const Row = styled.div`
 display: flex;
@@ -87,10 +88,12 @@ class App extends React.Component {
         }
 
         this.state = {
+            dismissable: false,
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
             sidebarOpen: true,
             flyoutOpen: false,
+            flyoutCallback: ()=>{},
             song: new Song(this),
             editor: new Editor(this),
             mouse: {
@@ -112,7 +115,10 @@ class App extends React.Component {
     SetSidebar = (open) => { this.setState({ sidebarOpen: open }) };
     ToggleSidebar = () => { this.SetSidebar(!this.state.sidebarOpen) };
     OpenFlyout = (onComplete) => { console.log("open flyout")
-        this.setState({flyoutOpen:true}); }
+        this.setState({flyoutOpen:true, dismissable:true, flyoutCallback:onComplete}); }
+    DismissPopout = () => {
+        this.setState({flyoutOpen:false, dismissable:false}); 
+    };
 
     componentDidMount() {
         window.addEventListener("resize", this.resize.bind(this));
@@ -153,7 +159,7 @@ class App extends React.Component {
                             <Col>
                                 <Sidebar title={"Tracks"}>
                                 {this.state.song.tracks.map((track, index) =>
-                                    <TrackSettings key={index} index={index} track={track} editor={this.state.editor} />)
+                                    <TrackSettings key={index} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
                                 }
                                 </Sidebar>
                             </Col>
@@ -164,11 +170,12 @@ class App extends React.Component {
                             </Col>
                         </Row>
                     </Container>
-                    <Flyout open={this.state.flyoutOpen}>
-                        <ImageButton></ImageButton>
-                    </Flyout>
+                    
                 </div>
-                <OverlayDiv/>
+                {this.state.dismissable == true ? <OverlayDiv onClick={this.DismissPopout}/> : ''}
+                <Flyout open={this.state.flyoutOpen}>
+                        <InstrumentSelect callback={this.state.flyoutOpen?this.state.flyoutCallback:()=>{}}/>
+                    </Flyout>
                 {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>
         );

@@ -8,6 +8,7 @@ export class Track {
         console.log("new track");
 
         this.song = song;
+        this.app = song.app;
         this.name = "track 01";
         this.instrument = instruments.Clarinet;
         this.midiTrack = new MidiWriter.Track();
@@ -31,6 +32,11 @@ export class Track {
         // Generate a data URI
         this.write = new MidiWriter.Writer(this.midiTrack);
         
+    }
+
+    SetInstrument(newInstrument) {
+        console.log("SET INSTRUMENT");
+        console.log(newInstrument);
     }
 }
 

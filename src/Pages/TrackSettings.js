@@ -1,10 +1,10 @@
-import handleTexture from './images/handleTexture.png';
+import handleTexture from './../images/handleTexture.png';
 import { faEraser, faPeopleArrows } from "@fortawesome/free-solid-svg-icons";
 import { InputGroup } from "react-bootstrap";
 import styled from "styled-components";
-import { Col, Form, H1, Row } from "./layout/page";
-import { Button, IconButton, ImageButton } from './layout/controls';
-import Editor from './Editor';
+import { Col, Form, H1, Raised, Row } from "../layout/page";
+import { Button, IconButton, ImageButton, InstrumentButton } from '../layout/controls';
+import Editor from '../Editor';
 
 const TrackWindow = styled.div`
 padding:1em;
@@ -42,11 +42,6 @@ margin: 0;
 display: inline-block;
 `;
 
-const InstrumentButton = props => {
-    return (
-        <ImageButton image={props.instrument.image} variant="green" onClick={props.onClick}>{props.instrument.name}</ImageButton>
-    );
-}
 
 export const TrackSettings = props => {
     let track = props.track;
@@ -54,7 +49,7 @@ export const TrackSettings = props => {
     return (
         <Row>
             <Col>
-                <TrackWindow>
+                <Raised>
                     <Row>
                         <TrackHandle xs={2} >
                             <TrackNumber>{props.index}</TrackNumber>
@@ -71,7 +66,7 @@ export const TrackSettings = props => {
                                 <Button lit>Choose</Button>
                             </InputGroup>
                             Instrument
-                            <InstrumentButton instrument={track.instrument} onClick={props.editor.OpenFlyout} />
+                            <InstrumentButton instrument={track.instrument} onClick={()=>{props.editor.OpenFlyout(()=>{track.SetInstrument(track.instrument)})}} />
                             <InputGroup>
                                 <InputGroup.Text><i>Export this track</i></InputGroup.Text>
                                 <Form.Switch></Form.Switch>
@@ -86,7 +81,7 @@ export const TrackSettings = props => {
                             </InputGroup>
                         </Col>
                     </Row>
-                </TrackWindow>
+                </Raised>
             </Col>
         </Row>
     );

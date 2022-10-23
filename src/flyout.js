@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Col, Container, H1, Row } from "./layout/page";
+import { Col, Container, H1, Raised, Row } from "./layout/page";
 
 const FlyoutDiv = styled.div`
     transition:right .4s;
@@ -55,9 +55,9 @@ export class Flyout extends React.Component {
     render() {
         return (
             <FlyoutDiv $open={this.props.open}>
-            <ButtonWindow>
-                {this.props.children}
-            </ButtonWindow>
+                    <ButtonWindow>
+                        {this.props.children}
+                    </ButtonWindow>
             </FlyoutDiv>
         );
     }
@@ -74,20 +74,27 @@ export const Sidebar = props => {
 }
 
 export const ButtonWindow = props => {
+    let jsx = (
+        
+    <Shelf>
+        <Row>
+            <Col>
+                <Title>
+                    <H1>{props.title}</H1>
+                </Title>
+            </Col>
+        </Row>
+        <Row style={{ overflowY: "scroll" }}>
+            <Col>
+                {props.children}
+            </Col>
+        </Row>
+        
+    </Shelf>
+    );
+
     return (
-        <Shelf>
-            <Row>
-                <Col>
-                    <Title>
-                        <H1>{props.title}</H1>
-                    </Title>
-                </Col>
-            </Row>
-            <Row style={{ overflowY: "scroll" }}>
-                <Col>
-                    {props.children}
-                </Col>
-            </Row>
-        </Shelf>
+        jsx
+        //props.raised ? <Raised>{jsx}</Raised> : <>{jsx}</>
     );
 }

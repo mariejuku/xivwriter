@@ -33,6 +33,18 @@ top:0;
 bottom:0;
 `
 
+export const Raised = styled.div`
+padding:1em;
+border-radius:1em;
+backdrop-filter: blur(5px);
+background-color:#222e;
+border-color: #0004;
+color: #ccc;
+box-shadow: inset 0 -6px 10px #fff1, inset 0 10px 10px #fff4, 0 0 10px #0008;
+overflow:hidden;
+margin:.5em;
+`
+
 export const Form = {
     Control: styled(bForm.Control)``,
     Text: styled(bForm.Text)``,

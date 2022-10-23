@@ -28,7 +28,7 @@ import iViola from './icons/viola.png';
 import iViolin from './icons/violin.png';
 
 
-const instruments = {
+export const instruments = {
     Harp:{
         name:"Harp",
         character:"acoustic",
