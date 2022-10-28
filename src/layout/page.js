@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { Container as bContainer, Row as bRow, Col as bCol, Button as bButton, Form as bForm } from 'react-bootstrap';
+import { Container as bContainer, Row as bRow, Col as bCol, Form as bForm } from 'react-bootstrap';
 
 export const Container = styled(bContainer)`
 padding:0;
@@ -46,7 +46,35 @@ margin:.5em;
 `
 
 export const Form = {
-    Control: styled(bForm.Control)``,
+    Control: styled(bForm.Control)`
+    transition: all .1s;
+    &[type="number"] {
+        padding-right:1px;
+        &.small {
+            text-align:center;
+            &:hover {
+                padding-left:0px;
+                &::-webkit-inner-spin-button {
+                    opacity: 1;
+                }
+            }
+            &::-webkit-inner-spin-button {
+                opacity: 0;
+            }
+        }
+    }
+    &::-webkit-inner-spin-button {
+        
+        transition:all .15s;
+        opacity: 1;
+        background-color:red;
+        height:40px;
+        filter: invert(79%);
+    }
+    &:hover {
+        
+    }
+    `,
     Text: styled(bForm.Text)``,
     Label: styled(bForm.Label)``,
     Range: styled(bForm.Range)`
@@ -54,6 +82,7 @@ export const Form = {
     `,
     Switch: styled(bForm.Switch)``
 }
+
 
 export const H1 = styled.h1`
 font-family:'Hingashi Extended', sans-serif;

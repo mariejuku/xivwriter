@@ -1,12 +1,13 @@
 import MidiPlayer from 'midi-player-js';
 import MidiWriter from 'midi-writer-js';
 import Soundfont from 'soundfont-player';
-import instruments from './instruments';
+import instruments from '../instruments';
 
 export class Track {
-    constructor(song) {
+    constructor(song, index) {
         console.log("new track");
 
+        this.index = index;
         this.song = song;
         this.app = song.app;
         this.name = "track 01";
@@ -34,9 +35,12 @@ export class Track {
         
     }
 
-    SetInstrument(newInstrument) {
-        console.log("SET INSTRUMENT");
-        console.log(newInstrument);
+    SetInstrument = (newInstrument) => {
+        console.log("TRACK SET INSTRUMENT");
+        
+        this.instrument = newInstrument;
+        
+        this.app.DismissPopout();
     }
 }
 
@@ -49,16 +53,18 @@ export default class Song {
         this.bpm = 100;
         this.timeSignature = 4; //beats per measure
 
-        this.tracks = [
-            new Track(this),
-            new Track(this),
-            new Track(this),
-            new Track(this),
-            new Track(this),
-            new Track(this),
-            new Track(this),
-            new Track(this)
-        ];
+        this.tracks = [];
+        this.AddTrack();
+        this.AddTrack();
+    }
+
+    AddTrack = () => {
+        let newTrack = new Track(this,this.tracks.count);
+        this.tracks.push(newTrack);
+    }
+
+    TrackSetInstrument = (newInstrument,index) => {
+        this.tracks[index].instrument = newInstrument;
     }
 
     testPlay = (event) => {

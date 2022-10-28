@@ -13,7 +13,6 @@ export const InstrumentSelect = props => {
             <Col>
                 {Object.values(instruments).map((instrument, index) =>
                     <Row><Col>
-                        yarp
                         <InstrumentButton instrument={instrument} onClick={() => props.callback(instrument)} />
                     </Col></Row>
                 )}

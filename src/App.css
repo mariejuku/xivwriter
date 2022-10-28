@@ -58,6 +58,7 @@ border-radius: 2px;
 	background-color: #fff0;
 	border-color: #0000;
 	color: #ccc;
+	height:40px;
 }
 .btn, .btn svg {
 	transition: all .2s, border-color .05s;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { Button as bButton } from 'react-bootstrap';
+import { Button as bButton, DropdownButton as bDropdownButton, Dropdown as bDropdown } from 'react-bootstrap';
 import { Row, Col } from './layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -10,34 +10,35 @@ import image from '../icons/bassDrum.png';
 
 export const LButton = styled(bButton)`
     overflow: hidden;
+    flex-shrink: 0;
 
     &, &:focus {
         color: ${props => props.color};
         background-color: ${props => props.background};
         border-color: ${props => props.$lit ? `#0004` : `#0000`};
-        box-shadow: ${props => props.$lit 
-            ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}8`
-            : `inset 0 0 10px #0000, 0 0 10px ${props.$overColor}0`};
+        box-shadow: ${props => props.$lit
+        ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}8`
+        : `inset 0 0 10px #0000, 0 0 10px ${props.$overColor}0`};
     }
 
     &:hover, &:hover:focus {
         color: ${props => props.$overColor};
         background-color: ${props => props.$overBackground};
         border-color: #0003;
-        box-shadow: ${props => props.$lit 
-            ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}`
-            : `inset 0 0 10px #0004, 0 0 10px ${props.$overColor}2`};
+        box-shadow: ${props => props.$lit
+        ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}`
+        : `inset 0 0 10px #0004, 0 0 10px ${props.$overColor}2`};
         
         & svg {
-            ${props => props.$lit 
-            ? `filter: drop-shadow(0 0 5px ${props.$overColor}0);`
-            : `filter: drop-shadow(0 0 5px ${props.$overColor}8);`
-            }
+            ${props => props.$lit
+        ? `filter: drop-shadow(0 0 5px ${props.$overColor}0);`
+        : `filter: drop-shadow(0 0 5px ${props.$overColor}8);`
+    }
         }
     }
 
     &:active, &:hover:active, &:hover:focus:active {        
-        ${props => props.$lit 
+        ${props => props.$lit
         ? `background-color: ${props.$overBackground}a;`
         : `border-color: ${props.$overColor}8;`}
     }
@@ -51,7 +52,7 @@ export const Button = props => {
     let showBackground = props.showBackground;
 
     if (props.variant) {
-        switch(props.variant) {
+        switch (props.variant) {
             case 'green':
                 litColor = '#0b4';
                 litColorOver = '#0e4';
@@ -74,8 +75,8 @@ export const Button = props => {
 
     let color = litColor;
     let overColor = litColorOver;
-    let background = `${showBackground?litColor:unlitColor}${showBackground?2:0}`;
-    let overBackground = `${litColorOver}${showBackground?4:2}`;
+    let background = `${showBackground ? litColor : unlitColor}${showBackground ? 2 : 0}`;
+    let overBackground = `${litColorOver}${showBackground ? 4 : 2}`;
 
     if (props.lit) {
         color = unlitColor;
@@ -86,11 +87,11 @@ export const Button = props => {
         }
         background = litColor;
         overBackground = litColorOver;
-    } 
+    }
 
     return (
-        <LButton color={color} $overColor={overColor} background={background} $overBackground={overBackground} 
-        onClick={props.onClick} size={props.size} $lit={props.lit}>{props.children}</LButton>
+        <LButton color={color} $overColor={overColor} background={background} $overBackground={overBackground}
+            onClick={props.onClick} size={props.size} $lit={props.lit}>{props.children}</LButton>
     );
 }
 
@@ -122,7 +123,7 @@ export const IconButton = function IconButton(props) {
     let showBackground = props.showBackground;
 
     if (props.variant) {
-        switch(props.variant) {
+        switch (props.variant) {
             case 'green':
                 litColor = '#0b4';
                 litColorOver = '#0e4';
@@ -145,8 +146,8 @@ export const IconButton = function IconButton(props) {
 
     let color = litColor;
     let overColor = litColorOver;
-    let background = `${showBackground?litColor:unlitColor}${showBackground?2:0}`;
-    let overBackground = `${litColorOver}${showBackground?4:2}`;
+    let background = `${showBackground ? litColor : unlitColor}${showBackground ? 2 : 0}`;
+    let overBackground = `${litColorOver}${showBackground ? 4 : 2}`;
 
     if (props.lit) {
         color = unlitColor;
@@ -157,11 +158,11 @@ export const IconButton = function IconButton(props) {
         }
         background = litColor;
         overBackground = litColorOver;
-    } 
+    }
 
     return (
-        <IconButtonContainer color={color} $overColor={overColor} background={background} $overBackground={overBackground} 
-        onClick={props.onClick} size={props.size} $lit={props.lit}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
+        <IconButtonContainer color={color} $overColor={overColor} background={background} $overBackground={overBackground}
+            onClick={props.onClick} size={props.size} $lit={props.lit}><FontAwesomeIcon icon={props.icon} /></IconButtonContainer>
     );
 }
 
@@ -175,7 +176,7 @@ export const SliderButton = function SliderButton(props) {
     let icon = (leftHand ? !open : open) ? faCaretLeft : faCaretRight;
 
     if (props.icon != undefined) { icon = props.icon; }
-    
+
     return (
         <SlideButtonContainer variant={props.variant} size={props.size} onClick={props.onChange}><FontAwesomeIcon icon={icon} /></SlideButtonContainer>
     );
@@ -195,6 +196,7 @@ height:40px;
 text-align:center;
 margin:0px;
 padding:8px;
+flex-shrink: 0;
 `
 
 const DividerInner = styled.div`
@@ -227,7 +229,7 @@ export const ImageButton = props => {
         <ImageButtonContainer onClick={props.onClick}>
             <Row>
                 <Col xs="auto">
-                    <img src={props.image}/>
+                    <img src={props.image} />
                 </Col>
                 <Col>{props.children}</Col>
             </Row>
@@ -239,4 +241,43 @@ export const InstrumentButton = props => {
     return (
         <ImageButton image={props.instrument.image} variant="green" onClick={props.onClick}>{props.instrument.name}</ImageButton>
     );
+}
+
+export const DropdownButton = styled(bDropdownButton)`
+overflow: hidden;
+    flex-shrink: 0;
+
+    &, &:focus {
+        color: ${props => props.color};
+        background-color: ${props => props.background};
+        border-color: ${props => props.$lit ? `#0004` : `#0000`};
+        box-shadow: ${props => props.$lit
+        ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}8`
+        : `inset 0 0 10px #0000, 0 0 10px ${props.$overColor}0`};
+    }
+
+    &:hover, &:hover:focus {
+        color: ${props => props.$overColor};
+        background-color: ${props => props.$overBackground};
+        border-color: #0003;
+        box-shadow: ${props => props.$lit
+        ? `inset 0 0 10px #0004, 0 0 10px ${props.$overBackground}`
+        : `inset 0 0 10px #0004, 0 0 10px ${props.$overColor}2`};
+        
+        & svg {
+            ${props => props.$lit
+        ? `filter: drop-shadow(0 0 5px ${props.$overColor}0);`
+        : `filter: drop-shadow(0 0 5px ${props.$overColor}8);`
+    }
+        }
+    }
+
+    &:active, &:hover:active, &:hover:focus:active {        
+        ${props => props.$lit
+        ? `background-color: ${props.$overBackground}a;`
+        : `border-color: ${props.$overColor}8;`}
+    }
+`
+export const Dropdown = {
+    Item: styled(bDropdown.Item)``
 }

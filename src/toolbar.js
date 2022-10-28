@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
-import { Form, Row, Col } from "./layout/layout";
+import { Form, Row, Col, Dropdown, DropdownButton } from "./layout/layout";
 import { Button, IconButton, SliderButton, Divider } from './layout/controls'
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle, faCaretRight, faCopy, faCut, faPaste, faBorderStyle, faVolumeHigh, faVolumeLow, faGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -44,8 +44,8 @@ class Toolbar extends React.Component {
                                 <Stack direction="horizontal" gap={0}>
                                     <Col sm="auto">
                                         <InputGroup>
-                                            <InputGroup.Text><FontAwesomeIcon icon={faMusic} /> <i>BPM</i></InputGroup.Text>
-                                            <Form.Control type="number" value={song.bpm} placeholder={song.bpm} className="bpm" onChange={song.changeBPM} />
+                                            <InputGroup.Text style={{width:"60px", textAlign:"center"}}><i>BPM</i></InputGroup.Text>
+                                            <Form.Control style={{width:"61px"}} type="number" value={song.bpm} placeholder={song.bpm} className="bpm small" onChange={song.changeBPM} />
                                         </InputGroup>
                                     </Col>
                                     <Divider />
@@ -65,6 +65,17 @@ class Toolbar extends React.Component {
                                     <IconButton icon={faCut} />
                                     <IconButton icon={faPaste} />
                                     <IconButton icon={faBorderStyle} />
+                                    <Divider />
+                                    <Col sm="auto">
+                                        <InputGroup>
+                                            <DropdownButton id="dropdown-basic-button" title="Clarinet">
+                                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                            </DropdownButton>
+                                        </InputGroup>
+                                    </Col>
+
                                     {/* <Divider />
                                     <IconButton icon={faSearchLocation} />
                                     <IconButton icon={faSearchMinus} />

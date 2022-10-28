@@ -9,6 +9,7 @@ export default class Editor {
         this.beatsToPixels = 80;
         this.subdivisions = 4;
         this.gridValue = "1/4";
+        this.flyoutCallback = null;
     }
 
     play = (note) => {
@@ -20,7 +21,9 @@ export default class Editor {
     }
 
     OpenFlyout = (callback) => {
-        this.app.OpenFlyout(callback);
+        console.log("open flyout")
+        this.flyoutCallback = callback;
+        this.app.setState({flyoutOpen:true, dismissable:true, flyoutCallback:this.flyoutCallback});
     }
 
     changeGrid = (event) => {

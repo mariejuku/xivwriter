@@ -60,24 +60,11 @@ export const TrackSettings = props => {
                                 <Form.Control value={track.name} placeholder="Track Name" />
                                 <IconButton icon={faEraser} />
                             </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Text><i>Instrument</i></InputGroup.Text>
-                                <Form.Control value={track.instrument ? track.instrument.name : "No Instrument"} placeholder="Instrument" />
-                                <Button lit>Choose</Button>
-                            </InputGroup>
                             Instrument
-                            <InstrumentButton instrument={track.instrument} onClick={()=>{props.editor.OpenFlyout(()=>{track.SetInstrument(track.instrument)})}} />
+                            <InstrumentButton instrument={track.instrument} onClick={()=>{props.editor.OpenFlyout(track.SetInstrument)}} />
                             <InputGroup>
                                 <InputGroup.Text><i>Export this track</i></InputGroup.Text>
                                 <Form.Switch></Form.Switch>
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Text><i>Track Name</i></InputGroup.Text>
-                                <Form.Control value={track.name} placeholder="Track Name" />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Text><i>Track Name</i></InputGroup.Text>
-                                <Form.Control value={track.name} placeholder="Track Name" />
                             </InputGroup>
                         </Col>
                     </Row>

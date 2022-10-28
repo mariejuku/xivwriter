@@ -4,7 +4,7 @@ import './App.css';
 import React from 'react';
 import Soundfont from 'soundfont-player';
 import Editor from './Editor';
-import Song, { Track } from './Song';
+import Song, { Track } from './Classes/Song';
 
 import { H1, Overlay } from './layout/page';
 import { Container, Col } from './layout/layout';
@@ -91,9 +91,9 @@ class App extends React.Component {
             dismissable: false,
             loadingState: "unloaded",
             tooltip: "Orchestrion Roll",
-            sidebarOpen: true,
+            sidebarOpen: false,
             flyoutOpen: false,
-            flyoutCallback: ()=>{},
+            flyoutCallback: () => { },
             song: new Song(this),
             editor: new Editor(this),
             mouse: {
@@ -114,10 +114,11 @@ class App extends React.Component {
 
     SetSidebar = (open) => { this.setState({ sidebarOpen: open }) };
     ToggleSidebar = () => { this.SetSidebar(!this.state.sidebarOpen) };
-    OpenFlyout = (onComplete) => { console.log("open flyout")
-        this.setState({flyoutOpen:true, dismissable:true, flyoutCallback:onComplete}); }
+
     DismissPopout = () => {
-        this.setState({flyoutOpen:false, dismissable:false}); 
+        if (this.state.dismissable) {
+            this.setState({ flyoutOpen: false, dismissable: false, flyoutCallback: () => { } });
+        }
     };
 
     componentDidMount() {
@@ -141,26 +142,23 @@ class App extends React.Component {
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
                     <Container fluid>
                         <Row $grow={true}>
-                            <Col xs={this.state.sidebarOpen ? 6 : 12}>
+                            <Col xs={this.state.sidebarOpen ? 6 : 12} style={{}}>
                                 <Row $grow={true}>
-                                    <Col>
+                                    <Col style={{width:0, overflowX:"hidden"}}>
                                         <Header />
                                         <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
                                         <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
                                     </Col>
-                                    <Col xs={"auto"} style={{zIndex:1}}>
-                                        <SliderButton onChange={this.OpenFlyout} open={this.state.flyoutOpen} />
-                                    </Col>
-                                    <Col xs={"auto"} style={{zIndex:1}}>
+                                    <Col xs={"auto"} style={{ zIndex: 1 }}>
                                         <SliderButton leftHand onChange={this.ToggleSidebar} open={this.state.sidebarOpen} />
                                     </Col>
                                 </Row>
                             </Col>
                             <Col>
                                 <Sidebar title={"Tracks"}>
-                                {this.state.song.tracks.map((track, index) =>
-                                    <TrackSettings key={index} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
-                                }
+                                    {this.state.song.tracks.map((track, index) =>
+                                        <TrackSettings key={index} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
+                                    }
                                 </Sidebar>
                             </Col>
                         </Row>
@@ -170,12 +168,13 @@ class App extends React.Component {
                             </Col>
                         </Row>
                     </Container>
-                    
+
                 </div>
-                {this.state.dismissable == true ? <OverlayDiv onClick={this.DismissPopout}/> : ''}
+                {this.state.dismissable == true ? <OverlayDiv onClick={this.DismissPopout} /> : ''}
                 <Flyout open={this.state.flyoutOpen}>
-                        <InstrumentSelect callback={this.state.flyoutOpen?this.state.flyoutCallback:()=>{}}/>
-                    </Flyout>
+                    <InstrumentSelect callback={this.state.flyoutOpen ? this.state.flyoutCallback
+                        : () => { }} />
+                </Flyout>
                 {this.state.loadingState !== 'loaded' ? <Launcher loadingState={this.state.loadingState} onClick={this.Load} /> : ''}
             </>
         );

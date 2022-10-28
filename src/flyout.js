@@ -5,8 +5,7 @@ import { Col, Container, H1, Raised, Row } from "./layout/page";
 const FlyoutDiv = styled.div`
     transition:right .4s;
     position:fixed;
-    right: ${props => props.$open ? `-100px` : `-700px`};
-    padding-right:100px;
+    right: ${props => props.$open ? `0px` : `-700px`};
     top:0;
     bottom:40px;
     width:500px;
