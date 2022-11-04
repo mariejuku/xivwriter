@@ -12,8 +12,8 @@ export const InstrumentSelect = props => {
         <Row>
             <Col>
                 {Object.values(instruments).map((instrument, index) =>
-                    <Row><Col>
-                        <InstrumentButton instrument={instrument} onClick={() => props.callback(instrument)} />
+                    <Row key={instrument.name}><Col>
+                        <InstrumentButton  instrument={instrument} onClick={() => props.callback(instrument)} />
                     </Col></Row>
                 )}
             </Col>

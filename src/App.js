@@ -123,6 +123,12 @@ class App extends React.Component {
 
     componentDidMount() {
         window.addEventListener("resize", this.resize.bind(this));
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+            const xPos = event.pageX + "px";
+            const yPos = event.pageY + "px";
+            //
+          });
     }
 
     sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
@@ -157,7 +163,7 @@ class App extends React.Component {
                             <Col>
                                 <Sidebar title={"Tracks"}>
                                     {this.state.song.tracks.map((track, index) =>
-                                        <TrackSettings key={index} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
+                                        <TrackSettings key={track.key} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
                                     }
                                 </Sidebar>
                             </Col>

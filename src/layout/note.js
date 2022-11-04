@@ -3,6 +3,13 @@ import styled from "styled-components";
 import { Container as bContainer, Row as bRow, Col as bCol, Button as bButton, Form as bForm } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+const pitches = [
+    'C6',
+    'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
+    'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
+    'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3', 'C#3', 'C3'
+];
+
 const NoteCol = styled.div`
             display:inline-block;
             position:absolute;
@@ -43,6 +50,8 @@ overflow:hidden;
 line-height:0;
 padding:0;
 
+top: ${props => (pitches.indexOf(props.$pitch) * 20)}px;
+left: ${props => (props.$beat * props.$editor.beatsToPixels)}px;
 
 border-radius:4px 8px 8px 4px;
 transition:border-radius .1s;
@@ -67,11 +76,19 @@ color:#fff;
 }
 `
 
+const NoteClick = (event,note) => {
+    if (event.button == 2) {
+        note.track.RemoveNote(note.GetUniqueRollKey());
+    }
+}
 
-const Note = props => (
-    <NoteOuter style={props.style}>
-        <NoteHandle left /><NoteName>C6</NoteName><NoteHandle right />
-    </NoteOuter>
-);
+const Note = props => {
+    
+    return (
+        <NoteOuter onMouseUp={(event) => {NoteClick(event,props.note)}} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat} style={props.style}>
+            <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
+        </NoteOuter>
+    )
+};
 
 export default Note;

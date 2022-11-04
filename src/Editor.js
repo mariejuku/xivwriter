@@ -5,11 +5,26 @@ export default class Editor {
         this.app = app;
         this.volume = 50;
         this.audioContext = app.audioContext;
-
+        this.selectedTrack = 0;
+        this.snapToGrid = true;
         this.beatsToPixels = 80;
         this.subdivisions = 4;
         this.gridValue = "1/4";
         this.flyoutCallback = null;
+    }
+
+    SelectInPianoRoll = (pitch, beat) => {
+        if (this.snapToGrid) {
+            let quantize = 1 / this.subdivisions;
+            beat = Math.floor(beat / quantize) * quantize;
+        }
+        this.app.state.song.AddNote(this.selectedTrack,pitch,4,beat);
+    }
+
+    changeSelectedTrack = (newTrackIndex) => {
+        newTrackIndex = Math.min(newTrackIndex,this.app.state.song.tracks.length-1);
+        this.selectedTrack = newTrackIndex;
+        this.app.setState({editor: this});
     }
 
     play = (note) => {
@@ -21,7 +36,6 @@ export default class Editor {
     }
 
     OpenFlyout = (callback) => {
-        console.log("open flyout")
         this.flyoutCallback = callback;
         this.app.setState({flyoutOpen:true, dismissable:true, flyoutCallback:this.flyoutCallback});
     }
