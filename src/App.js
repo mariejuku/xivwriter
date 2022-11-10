@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Header from './header';
 import Footer from './footer';
 import Toolbar from './toolbar';
-import Sequencer from "./sequencer";
+import Sequencer from "./Sequencer";
 import instruments from "./instruments";
 import { Flyout, Shelf, Sidebar } from "./flyout";
 import { TrackSettings } from "./Pages/TrackSettings";
@@ -143,6 +143,7 @@ class App extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         return (
             <>
                 <div className='App' onMouseDown={this.MouseDown} onMouseUp={this.MouseUp}>
@@ -153,7 +154,7 @@ class App extends React.Component {
                                     <Col style={{width:0, overflowX:"hidden"}}>
                                         <Header />
                                         <Toolbar song={this.state.song} editor={this.state.editor} tool={this.state.tool} SetTool={this.SetTool} />
-                                        <Sequencer editor={this.state.editor} song={this.state.song} mouse={this.state.mouse} />
+                                        <Sequencer song={this.state.song} editor={this.state.editor} mouse={this.state.mouse} />
                                     </Col>
                                     <Col xs={"auto"} style={{ zIndex: 1 }}>
                                         <SliderButton leftHand onChange={this.ToggleSidebar} open={this.state.sidebarOpen} />
@@ -162,7 +163,7 @@ class App extends React.Component {
                             </Col>
                             <Col>
                                 <Sidebar title={"Tracks"}>
-                                    {this.state.song.tracks.map((track, index) =>
+                                    {(this.state.song.tracks != undefined) ? <></> : this.state.song.tracks.map((track, index) =>
                                         <TrackSettings key={track.key} index={index} track={track} editor={this.state.editor} song={this.state.song} />)
                                     }
                                 </Sidebar>

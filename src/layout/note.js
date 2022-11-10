@@ -2,6 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 import { Container as bContainer, Row as bRow, Col as bCol, Button as bButton, Form as bForm } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ItemTypes } from '../constants';
+import { useDrag } from 'react-dnd';
 
 const pitches = [
     'C6',
@@ -19,10 +21,11 @@ const NoteCol = styled.div`
             `
 
 const NoteHandle = styled(NoteCol)`
-            width:2px;
+            width:4px;
             background:#0000;
             transition:background .1s;
             border-left:1px solid #fff1;
+            cursor:ew-resize;
             
             ${function (props) {
         if (props.left) {
@@ -76,16 +79,22 @@ color:#fff;
 }
 `
 
-const NoteClick = (event,note) => {
+const NoteClick = (event, note) => {
     if (event.button == 2) {
         note.track.RemoveNote(note.GetUniqueRollKey());
     }
 }
 
-const Note = props => {
-    
+function Note(props) {
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: ItemTypes.NOTE,
+        collect: monitor => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }))
+
     return (
-        <NoteOuter onMouseUp={(event) => {NoteClick(event,props.note)}} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat} style={props.style}>
+        <NoteOuter ref={drag} style={{background: isDragging ? 'red' : 'green'}} onMouseUp={(event) => { NoteClick(event, props.note) }} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
             <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
         </NoteOuter>
     )

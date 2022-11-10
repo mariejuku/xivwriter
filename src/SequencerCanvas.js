@@ -5,6 +5,9 @@ import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave, Contain
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useEffect } from 'react'
+import { DndProvider,useDrag } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { ItemTypes } from './constants';
 
 const SequencerDiv = styled.div`
 position:absolute;
@@ -34,7 +37,6 @@ const SequencerCanvas = props => {
         beats: 4
     }
 
-
     const getMousePos = function (canvas, evt, props) {
         var rect = canvas.getBoundingClientRect(), // abs. size of element
             scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
@@ -56,7 +58,6 @@ const SequencerCanvas = props => {
             ctx.stroke();
             drawKeys(i + 1, ctx, canvas, props);
         }
-
     }
 
     const drawKeys = function (j, ctx, canvas, props) {
@@ -118,23 +119,39 @@ const SequencerCanvas = props => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
-        //Our draw come here
+
         draw(context, canvas, props)
     }, [draw])
 
     const onCanvasClick = function (event) {
         const canvas = canvasRef.current;
         let pos = getMousePos(canvas, event);
-        props.onCanvasClick(event.button, pos, event);
+        props.onCanvasClick(event.button, event);
+    }
+
+    const onCanvasMove = function (event) {
+        const canvas = canvasRef.current;
+        let pos = getMousePos(canvas, event);
+        console.log(`Mouse position update. New pos: ${pos}`)
+        props.onCanvasMove(event.button, pos, event);
+    }
+
+    const onMoveNote = function (event, note) {
+        console.log('move note pos:');
+        console.log(props.pos);
+        song.MoveNote(note.track.index, props.pos.pitch, props.pos.beat);
     }
 
     return (
         <SequencerDiv>
-            <canvas ref={canvasRef} width="1920" height="740" onClick={onCanvasClick} />
-            <CanvasOverlay onMouseUp={onCanvasClick}>
-                {song.tracks.map((track) => track.NotesArray().map((note) =>
-                    <Note key={note.key} note={note} editor={editor}/>
-                ))}
+            <canvas ref={canvasRef} width="1920" height="740" />
+            <CanvasOverlay onMouseMove={onCanvasMove} onClick={onCanvasClick}>
+                <DndProvider backend={HTML5Backend}>
+                    {song.tracks.map((track) => track.NotesArray().map((note) =>
+                        <Note key={note.key} note={note} editor={editor} onMoveNote={(event) => onMoveNote(event, note)} />
+                    ))}
+                </DndProvider>
+
             </CanvasOverlay>
         </SequencerDiv>
     );

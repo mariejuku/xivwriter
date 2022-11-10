@@ -68,10 +68,19 @@ export class Track {
         this.notes[newNote.GetUniqueRollKey()] = newNote;
     }
 
+    MoveNote = (noteUniqueKey,newPitch,newBeat) => {
+        console.log(`Move note: ${noteUniqueKey}`)
+        this.notes[noteUniqueKey].pitch = newPitch;
+        this.notes[noteUniqueKey].beat = newBeat;
+    }
+
     RemoveNote = (noteUniqueKey) => {
         console.log(`remove note: ${noteUniqueKey}`)
         delete this.notes[noteUniqueKey];
-        this.app.setState({ song: this });
+    }
+
+    Update = () => {
+        this.song.Update();
     }
 }
 
@@ -89,8 +98,22 @@ export default class Song {
         this.AddTrack();
     }
 
-    AddNote = (trackIndex,pitch,second,beat) => {
-        this.tracks[trackIndex].AddNote(pitch,second,beat);
+    Update = () => {
+        this.app.setState({ song:this });
+    }
+
+    AddNote = (trackIndex,pitch,duration,beat) => {
+        this.tracks[trackIndex].AddNote(pitch,duration,beat);
+        this.app.setState({ song: this });
+    }
+
+    MoveNote = (trackIndex,noteUniqueKey,newPitch,newBeat) => {
+        this.tracks[trackIndex].MoveNote(noteUniqueKey,newPitch,newBeat);
+        this.app.setState({ song: this });
+    }
+
+    RemoveNote = (trackIndex,noteUniqueKey) => {
+        this.tracks[trackIndex].RemoveNote(noteUniqueKey);
         this.app.setState({ song: this });
     }
 

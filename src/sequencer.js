@@ -37,29 +37,39 @@ const pitches = [
 class Sequencer extends React.Component {
     constructor(props) {
         super(props);
-    }
 
+        this.state = {
+            pos: {
+                pitch:'C5',
+                beat:0
+            }
+        }
+    }
     
-
-    handleChange = (event) => {
-        console.log(event.target.value);
-    }
-
-    onCanvasClick = (button, pos) => {
+    MousePosToSequencePos = (pos) => {
         let editor = this.props.editor;
         let beat = pos.x/editor.beatsToPixels;
         let quantizedBeat = Math.floor(beat*editor.subdivisions) / editor.subdivisions;
-        //let beat = Math.floor(measure*editor.subdivisions);
-        //console.log(`measure ${measure}`);
-        console.log(`beat ${quantizedBeat}`);
         
         let beatsPerSecond = this.props.song.bpm / 60;
-        console.log(`bps: ${beatsPerSecond}`);
         let second = quantizedBeat / beatsPerSecond;
-        console.log(`second: ${second}`);
         let pitch = pitches[Math.floor(pos.y/20)];
-        console.log(`pitch: ${pitch}`);
-        this.props.editor.SelectInPianoRoll(pitch,beat);
+        return {
+            pitch: pitch,
+            beat: beat
+        };
+    }
+
+    onCanvasMove = (button, pos) => {
+        console.log('canvas move');
+        this.setState({
+            pos: this.MousePosToSequencePos(pos)
+        });
+    }
+
+    onCanvasClick = (button) => {
+        let pos = this.state.pos;
+        this.props.editor.SelectInPianoRoll(pos.pitch,pos.beat);
     }
 
     render() {
@@ -93,7 +103,9 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas onCanvasClick={this.onCanvasClick} song={this.props.song} editor={this.props.editor}/>
+                        <SequencerCanvas onCanvasMove={this.onCanvasMove} onCanvasClick={this.onCanvasClick} 
+                        song={this.props.song} editor={this.props.editor} 
+                        pos={this.state.pos}/>
                     </CanvasPanel>
                 </SequenceRow>
                 </>
