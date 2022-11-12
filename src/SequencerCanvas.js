@@ -5,7 +5,7 @@ import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave, Contain
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useEffect } from 'react'
-import { DndProvider,useDrag } from "react-dnd";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ItemTypes } from './constants';
 
@@ -26,12 +26,51 @@ top:0;
 left:0;
 `
 
+
+const style = {
+    height: '12rem',
+    width: '12rem',
+    marginRight: '1.5rem',
+    marginBottom: '1.5rem',
+    color: 'white',
+    padding: '1rem',
+    textAlign: 'center',
+    fontSize: '1rem',
+    lineHeight: 'normal',
+    float: 'left',
+  }
+  
+const Dustbin = (props) => {
+    const [{ canDrop, isOver }, drop] = useDrop(() => ({
+        accept: ItemTypes.NOTE,
+        drop: () => ({ name: 'Dustbin' }),
+        collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+        }),
+    }))
+    const isActive = canDrop && isOver
+    let backgroundColor = '#222'
+    if (isActive) {
+        backgroundColor = 'darkgreen'
+    } else if (canDrop) {
+        backgroundColor = 'darkkhaki'
+    }
+    return (
+        <div ref={drop} style={{ ...style, backgroundColor }} data-testid="dustbin">
+            {isActive ? 'Release to drop' : 'Drag a box here'}
+            {props.children}
+        </div>
+    )
+}
+
 const SequencerCanvas = props => {
 
     let song = props.song;
     let editor = props.editor;
 
     const canvasRef = useRef(null);
+
     const settings = {
         keyHeight: 20,
         beats: 4
@@ -143,17 +182,21 @@ const SequencerCanvas = props => {
     }
 
     return (
-        <SequencerDiv>
-            <canvas ref={canvasRef} width="1920" height="740" />
-            <CanvasOverlay onMouseMove={onCanvasMove} onClick={onCanvasClick}>
-                <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={HTML5Backend}>
+            <SequencerDiv>
+                <canvas ref={canvasRef} width="1920" height="740" />
+                <Dustbin>
+                <CanvasOverlay onMouseMove={onCanvasMove} onClick={onCanvasClick}>
+
                     {song.tracks.map((track) => track.NotesArray().map((note) =>
                         <Note key={note.key} note={note} editor={editor} onMoveNote={(event) => onMoveNote(event, note)} />
                     ))}
-                </DndProvider>
 
-            </CanvasOverlay>
-        </SequencerDiv>
+
+                </CanvasOverlay>
+                </Dustbin>
+            </SequencerDiv>
+        </DndProvider>
     );
 }
 
