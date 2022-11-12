@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
-import Note from './layout/note';
+import Note, { NotePreview } from './layout/note';
 import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave, Container, Row, Col } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef, useEffect } from 'react'
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import React, { useRef, useEffect, memo } from 'react'
+import { DndProvider, useDrag, useDragLayer, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ItemTypes } from './constants';
+import { useState } from "react";
 
 const SequencerDiv = styled.div`
 position:absolute;
@@ -30,6 +31,7 @@ left:0;
 const style = {
     height: '12rem',
     width: '12rem',
+    paddingTop: '2em',
     marginRight: '1.5rem',
     marginBottom: '1.5rem',
     color: 'white',
@@ -38,17 +40,21 @@ const style = {
     fontSize: '1rem',
     lineHeight: 'normal',
     float: 'left',
-  }
-  
+}
+
 const Dustbin = (props) => {
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.NOTE,
-        drop: () => ({ name: 'Dustbin' }),
+        drop: (item, monitor) => {
+            let co = monitor.getInitialSourceClientOffset();
+            const delta = monitor.getDifferenceFromInitialOffset();
+            return ({ name: 'Dustbin', x: co.x + delta.x, y: co.y + delta.y });
+        },
         collect: (monitor) => ({
             isOver: monitor.isOver(),
             canDrop: monitor.canDrop(),
         }),
-    }))
+    }));
     const isActive = canDrop && isOver
     let backgroundColor = '#222'
     if (isActive) {
@@ -76,14 +82,13 @@ const SequencerCanvas = props => {
         beats: 4
     }
 
-    const getMousePos = function (canvas, evt, props) {
+    const getMousePos = function (canvas, event) {
         var rect = canvas.getBoundingClientRect(), // abs. size of element
             scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
             scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
-
         return {
-            x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-            y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+            x: (event.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+            y: (event.clientY - rect.top) * scaleY     // been adjusted to be relative to element
         }
     }
 
@@ -165,7 +170,7 @@ const SequencerCanvas = props => {
     const onCanvasClick = function (event) {
         const canvas = canvasRef.current;
         let pos = getMousePos(canvas, event);
-        props.onCanvasClick(event.button, event);
+        props.onCanvasClick(event.button, pos);
     }
 
     const onCanvasMove = function (event) {
@@ -175,10 +180,12 @@ const SequencerCanvas = props => {
         props.onCanvasMove(event.button, pos, event);
     }
 
-    const onMoveNote = function (event, note) {
-        console.log('move note pos:');
-        console.log(props.pos);
-        song.MoveNote(note.track.index, props.pos.pitch, props.pos.beat);
+    const onDropNote = function (note, x, y) {
+        let mousePos = getMousePos(canvasRef.current, {
+            clientX: x,
+            clientY: y
+        });
+        props.onDropNote(note, mousePos)
     }
 
     return (
@@ -186,14 +193,12 @@ const SequencerCanvas = props => {
             <SequencerDiv>
                 <canvas ref={canvasRef} width="1920" height="740" />
                 <Dustbin>
-                <CanvasOverlay onMouseMove={onCanvasMove} onClick={onCanvasClick}>
-
-                    {song.tracks.map((track) => track.NotesArray().map((note) =>
-                        <Note key={note.key} note={note} editor={editor} onMoveNote={(event) => onMoveNote(event, note)} />
-                    ))}
-
-
-                </CanvasOverlay>
+                    <CanvasOverlay onClick={onCanvasClick}>
+                        {song.tracks.map((track) => track.NotesArray().map((note) =>
+                            <Note key={note.key} note={note} editor={editor} onDropNote={onDropNote} />
+                        ))}
+                        <CustomDragLayer snapToGrid={false} editor={editor}/>
+                    </CanvasOverlay>
                 </Dustbin>
             </SequencerDiv>
         </DndProvider>
@@ -201,3 +206,58 @@ const SequencerCanvas = props => {
 }
 
 export default SequencerCanvas;
+
+const layerStyles = {
+    position: 'fixed',
+    pointerEvents: 'none',
+    zIndex: 100,
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+}
+
+function getItemStyles(initialOffset, currentOffset, isSnapToGrid) {
+    if (!initialOffset || !currentOffset) {
+        return {
+            display: 'none',
+        }
+    }
+    let { x, y } = currentOffset;
+    const transform = `translate(${x}px, ${y}px)`
+    return {
+        transform,
+        WebkitTransform: transform,
+    }
+}
+
+export const CustomDragLayer = (props) => {
+    const { itemType, isDragging, item, initialOffset, currentOffset } =
+        useDragLayer((monitor) => ({
+            item: monitor.getItem(),
+            itemType: monitor.getItemType(),
+            initialOffset: monitor.getInitialSourceClientOffset(),
+            currentOffset: monitor.getSourceClientOffset(),
+            isDragging: monitor.isDragging(),
+        }))
+    function renderItem() {
+        switch (itemType) {
+            case ItemTypes.NOTE:
+                return <NotePreview note={item.note} editor={props.editor}/>
+            default:
+                return null
+        }
+    }
+    if (!isDragging) {
+        return null
+    }
+    return (
+        <div style={layerStyles}>
+            <div
+                style={getItemStyles(initialOffset, currentOffset, props.snapToGrid)}
+            >
+                {renderItem()}
+            </div>
+        </div>
+    )
+}

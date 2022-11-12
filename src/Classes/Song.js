@@ -14,7 +14,7 @@ export class NoteData {
         console.log(`New note: ${pitch}, beat:${beat}, key:${this.key}`);
     }
 
-    GetUniqueRollKey() {
+    GetRollPosition() {
         return `${this.pitch},${this.beat}`;
     }
 }
@@ -31,6 +31,7 @@ export class Track {
         this.midiTrack = new MidiWriter.Track();
         this.midiTrack.addInstrumentName("clavinet");
         this.notes = {};
+        this.notesByPosition = {};
         this.key = `${index}-${this.instrument.name}-${Date.now()}`;
 
         // Add some notes:
@@ -65,11 +66,13 @@ export class Track {
 
     AddNote = (pitch, duration, beat) => {
         let newNote = new NoteData(this, beat, pitch, duration);
-        this.notes[newNote.GetUniqueRollKey()] = newNote;
+        this.notes[newNote.key] = newNote;
+        this.notesByPosition[newNote.GetRollPosition()] = newNote;
     }
 
     MoveNote = (noteUniqueKey,newPitch,newBeat) => {
         console.log(`Move note: ${noteUniqueKey}`)
+        console.log(this.notes[noteUniqueKey]);
         this.notes[noteUniqueKey].pitch = newPitch;
         this.notes[noteUniqueKey].beat = newBeat;
     }

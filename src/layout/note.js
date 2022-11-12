@@ -4,7 +4,8 @@ import { Container as bContainer, Row as bRow, Col as bCol, Button as bButton, F
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ItemTypes } from '../constants';
 import { useDrag } from 'react-dnd';
-
+import { useEffect } from 'react';
+import { getEmptyImage } from 'react-dnd-html5-backend'
 const pitches = [
     'C6',
     'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
@@ -81,23 +82,64 @@ color:#fff;
 
 const NoteClick = (event, note) => {
     if (event.button == 2) {
-        note.track.RemoveNote(note.GetUniqueRollKey());
+        note.track.RemoveNote(note.key);
     }
 }
 
 function Note(props) {
-    const [{ isDragging }, drag] = useDrag(() => ({
+    const [{ isDragging }, drag, preview] = useDrag(() => ({
         type: ItemTypes.NOTE,
-        collect: monitor => ({
-            isDragging: !!monitor.isDragging(),
+        item: { name: 'note', note: props.note },
+        end: (item, monitor) => {
+            const dropResult = monitor.getDropResult();
+
+            if (item && dropResult) {
+                console.log(dropResult);
+                props.onDropNote(props.note,
+                    dropResult.x,
+                    dropResult.y
+                );
+            }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+            handlerId: monitor.getHandlerId(),
         }),
     }))
 
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: false })
+    }, [])
+
+
+    if (isDragging) {
+        return <div ref={drag} />
+    }
+
+
     return (
-        <NoteOuter ref={drag} style={{background: isDragging ? 'red' : 'green'}} onMouseUp={(event) => { NoteClick(event, props.note) }} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
+        <NoteOuter ref={drag}
+            onMouseUp={(event) => { NoteClick(event, props.note) }} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
             <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
         </NoteOuter>
     )
 };
 
 export default Note;
+
+const NotePreviewOuter = styled(NoteOuter)`
+    left:0;
+    top:0;
+    color:#fff;
+    border-color:#ffff;
+    background:#3597eb;
+    border-radius:3px;
+`;
+
+export function NotePreview(props) {
+    return (
+        <NotePreviewOuter $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
+            <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
+        </NotePreviewOuter>
+    )
+};

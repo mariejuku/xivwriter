@@ -60,16 +60,19 @@ class Sequencer extends React.Component {
         };
     }
 
-    onCanvasMove = (button, pos) => {
-        console.log('canvas move');
-        this.setState({
-            pos: this.MousePosToSequencePos(pos)
-        });
+    onCanvasClick = (button, mousePos) => {
+        let rollPos = this.MousePosToSequencePos(mousePos);
+        this.props.editor.SelectInPianoRoll(rollPos.pitch, rollPos.beat);
     }
 
-    onCanvasClick = (button) => {
-        let pos = this.state.pos;
-        this.props.editor.SelectInPianoRoll(pos.pitch, pos.beat);
+    onDropNote = (note, mousePos) => {
+        console.log('mouse pos:');
+        console.log(mousePos);
+        let rollPos = this.MousePosToSequencePos(mousePos);
+        console.log('move note pos:');
+        console.log(rollPos);
+        console.log(note);
+        this.props.song.MoveNote(note.track.index, note.key, rollPos.pitch, rollPos.beat);
     }
 
     render() {
@@ -103,7 +106,7 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas onCanvasMove={this.onCanvasMove} onCanvasClick={this.onCanvasClick}
+                        <SequencerCanvas onCanvasClick={this.onCanvasClick} onDropNote={this.onDropNote}
                             song={this.props.song} editor={this.props.editor}
                             pos={this.state.pos} />
                     </CanvasPanel>
