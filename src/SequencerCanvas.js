@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
-import Note, { NotePreview } from './layout/note';
+import Note, { PreviewNote, PreviewNoteHandle, PreviewNoteOutline } from './layout/note';
 import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave, Container, Row, Col } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef, useEffect, memo } from 'react'
 import { DndProvider, useDrag, useDragLayer, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { ItemTypes } from './constants';
+import { ItemTypes, pitches } from './constants';
 import { useState } from "react";
 
 const SequencerDiv = styled.div`
@@ -25,8 +25,7 @@ height:740px;
 position:absolute;
 top:0;
 left:0;
-`
-
+`;
 
 const style = {
     height: '12rem',
@@ -42,13 +41,41 @@ const style = {
     float: 'left',
 }
 
-const Dustbin = (props) => {
+const getMousePos = function (canvas, event) {
+    var rect = canvas.getBoundingClientRect(), // abs. size of element
+        scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
+        scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+    return {
+        x: (event.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+        y: (event.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+    }
+}
+
+const CanvasDropArea = (props) => {
+    const GetDragPositions = (item, monitor) => {
+        console.log(item);
+        let co = monitor.getInitialSourceClientOffset();
+        let delta = monitor.getDifferenceFromInitialOffset();
+        let mouse = monitor.getClientOffset();
+        let elementMovePos = {
+            x: co.x + delta.x,
+            y: co.y + delta.y
+        }
+        let sequencePos = props.CanvasPosToSequencePos(
+            getMousePos(props.canvas.current, {
+                clientX: elementMovePos.x,
+                clientY: mouse.y
+            })
+        );
+        return ({ name: 'Canvas', elementMovePos, sequencePos });
+    };
     const [{ canDrop, isOver }, drop] = useDrop(() => ({
-        accept: ItemTypes.NOTE,
+        accept: [ItemTypes.NOTE, ItemTypes.NOTEHANDLE],
+        hover: (item, monitor) => {
+            return GetDragPositions(item, monitor);
+        },
         drop: (item, monitor) => {
-            let co = monitor.getInitialSourceClientOffset();
-            const delta = monitor.getDifferenceFromInitialOffset();
-            return ({ name: 'Dustbin', x: co.x + delta.x, y: co.y + delta.y });
+            return GetDragPositions(item, monitor);
         },
         collect: (monitor) => ({
             isOver: monitor.isOver(),
@@ -63,34 +90,17 @@ const Dustbin = (props) => {
         backgroundColor = 'darkkhaki'
     }
     return (
-        <div ref={drop} style={{ ...style, backgroundColor }} data-testid="dustbin">
-            {isActive ? 'Release to drop' : 'Drag a box here'}
+        <div ref={drop} style={{ ...style }} data-testid="canvas">
             {props.children}
         </div>
     )
 }
 
 const SequencerCanvas = props => {
-
     let song = props.song;
     let editor = props.editor;
-
     const canvasRef = useRef(null);
-
-    const settings = {
-        keyHeight: 20,
-        beats: 4
-    }
-
-    const getMousePos = function (canvas, event) {
-        var rect = canvas.getBoundingClientRect(), // abs. size of element
-            scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
-            scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
-        return {
-            x: (event.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-            y: (event.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-        }
-    }
+    const settings = { keyHeight: 20, beats: 4 }
 
     const drawOctaves = function (ctx, canvas, props) {
         for (let i = 1; i < 37; i += 12) {
@@ -163,7 +173,6 @@ const SequencerCanvas = props => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
-
         draw(context, canvas, props)
     }, [draw])
 
@@ -173,33 +182,19 @@ const SequencerCanvas = props => {
         props.onCanvasClick(event.button, pos);
     }
 
-    const onCanvasMove = function (event) {
-        const canvas = canvasRef.current;
-        let pos = getMousePos(canvas, event);
-        console.log(`Mouse position update. New pos: ${pos}`)
-        props.onCanvasMove(event.button, pos, event);
-    }
-
-    const onDropNote = function (note, x, y) {
-        let mousePos = getMousePos(canvasRef.current, {
-            clientX: x,
-            clientY: y
-        });
-        props.onDropNote(note, mousePos)
-    }
-
     return (
         <DndProvider backend={HTML5Backend}>
             <SequencerDiv>
                 <canvas ref={canvasRef} width="1920" height="740" />
-                <Dustbin>
+                <CanvasDropArea canvas={canvasRef} CanvasPosToSequencePos={props.CanvasPosToSequencePos}>
                     <CanvasOverlay onClick={onCanvasClick}>
                         {song.tracks.map((track) => track.NotesArray().map((note) =>
-                            <Note key={note.key} note={note} editor={editor} onDropNote={onDropNote} />
+                            <Note key={note.key} note={note} editor={editor} onDropNote={props.onDropNote} onDropNoteHandle={props.onDropNoteHandle} />
                         ))}
-                        <CustomDragLayer snapToGrid={false} editor={editor}/>
+                        <DragLayerHover snapToGrid={false} editor={editor} />
+                        <DragLayerPreview canvas={canvasRef} CanvasPosToSequencePos={props.CanvasPosToSequencePos} song={song} editor={editor} />
                     </CanvasOverlay>
-                </Dustbin>
+                </CanvasDropArea>
             </SequencerDiv>
         </DndProvider>
     );
@@ -218,11 +213,7 @@ const layerStyles = {
 }
 
 function getItemStyles(initialOffset, currentOffset, isSnapToGrid) {
-    if (!initialOffset || !currentOffset) {
-        return {
-            display: 'none',
-        }
-    }
+    if (!initialOffset || !currentOffset) { return { display: 'none' }}
     let { x, y } = currentOffset;
     const transform = `translate(${x}px, ${y}px)`
     return {
@@ -231,7 +222,7 @@ function getItemStyles(initialOffset, currentOffset, isSnapToGrid) {
     }
 }
 
-export const CustomDragLayer = (props) => {
+export const DragLayerHover = (props) => {
     const { itemType, isDragging, item, initialOffset, currentOffset } =
         useDragLayer((monitor) => ({
             item: monitor.getItem(),
@@ -243,7 +234,9 @@ export const CustomDragLayer = (props) => {
     function renderItem() {
         switch (itemType) {
             case ItemTypes.NOTE:
-                return <NotePreview note={item.note} editor={props.editor}/>
+                return <PreviewNote note={item.note} editor={props.editor} />
+            case ItemTypes.NOTEHANDLE:
+                return <PreviewNoteHandle />
             default:
                 return null
         }
@@ -253,11 +246,46 @@ export const CustomDragLayer = (props) => {
     }
     return (
         <div style={layerStyles}>
-            <div
-                style={getItemStyles(initialOffset, currentOffset, props.snapToGrid)}
-            >
+            <div style={getItemStyles(initialOffset, currentOffset, props.snapToGrid)} >
                 {renderItem()}
             </div>
+        </div>
+    )
+}
+
+export const DragLayerPreview = (props) => {
+    const { itemType, isDragging, item, initialOffset, currentOffset } =
+        useDragLayer((monitor) => ({
+            item: monitor.getItem(),
+            itemType: monitor.getItemType(),
+            initialOffset: monitor.getInitialSourceClientOffset(),
+            currentOffset: monitor.getSourceClientOffset(),
+            isDragging: monitor.isDragging(),
+        }))
+    function renderItem() {
+        console.log(currentOffset);
+
+        let sequencePos = props.CanvasPosToSequencePos(
+            getMousePos(props.canvas.current, {
+                clientX: currentOffset.x,
+                clientY: currentOffset.y
+            })
+        );
+
+        item.note.pitch = sequencePos.pitch;
+        item.note.beat = sequencePos.beat;
+
+        switch (itemType) {
+            case ItemTypes.NOTE:
+                return <PreviewNoteOutline note={item.note} editor={props.editor} />
+            default:
+                return null
+        }
+    }
+    if (!isDragging) { return null }
+    return (
+        <div>
+            {renderItem()};
         </div>
     )
 }

@@ -70,11 +70,12 @@ export class Track {
         this.notesByPosition[newNote.GetRollPosition()] = newNote;
     }
 
-    MoveNote = (noteUniqueKey,newPitch,newBeat) => {
+    EditNote = (noteUniqueKey,newPitch,newBeat,newDuration) => {
         console.log(`Move note: ${noteUniqueKey}`)
         console.log(this.notes[noteUniqueKey]);
         this.notes[noteUniqueKey].pitch = newPitch;
         this.notes[noteUniqueKey].beat = newBeat;
+        this.notes[noteUniqueKey].duration = newDuration;
     }
 
     RemoveNote = (noteUniqueKey) => {
@@ -110,8 +111,8 @@ export default class Song {
         this.app.setState({ song: this });
     }
 
-    MoveNote = (trackIndex,noteUniqueKey,newPitch,newBeat) => {
-        this.tracks[trackIndex].MoveNote(noteUniqueKey,newPitch,newBeat);
+    EditNote = (trackIndex,noteUniqueKey,newPitch,newBeat,newDuration) => {
+        this.tracks[trackIndex].EditNote(noteUniqueKey,newPitch,newBeat,newDuration);
         this.app.setState({ song: this });
     }
 

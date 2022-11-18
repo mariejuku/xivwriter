@@ -21,7 +21,7 @@ const NoteCol = styled.div`
             height:100%;
             `
 
-const NoteHandle = styled(NoteCol)`
+const NoteHandleStyle = styled(NoteCol)`
             width:4px;
             background:#0000;
             transition:background .1s;
@@ -29,10 +29,10 @@ const NoteHandle = styled(NoteCol)`
             cursor:ew-resize;
             
             ${function (props) {
-        if (props.left) {
+        if (props.direction === 'left') {
             return "left:0;"
         }
-        if (props.right) {
+        if (props.direction === 'right') {
             return "right:0;"
         }
     }}
@@ -48,13 +48,13 @@ font-size:.95em;
 
 const NoteOuter = styled(bButton)`
 position:absolute;
-width:40px;
+width:${props => (props.$editor.beatsToPixels * props.$note.duration)}px;
 height:20px;
 overflow:hidden;
 line-height:0;
 padding:0;
 
-top: ${props => (pitches.indexOf(props.$pitch) * 20)}px;
+top: ${props => (pitches.indexOf(props.$note.pitch) * 20)}px;
 left: ${props => (props.$beat * props.$editor.beatsToPixels)}px;
 
 border-radius:4px 8px 8px 4px;
@@ -75,7 +75,7 @@ color:#fff;
     border-radius:3px;
 }
 
-&.btn:hover ${NoteHandle} {
+&.btn:hover ${NoteHandleStyle} {
     background:#0006;
 }
 `
@@ -91,14 +91,10 @@ function Note(props) {
         type: ItemTypes.NOTE,
         item: { name: 'note', note: props.note },
         end: (item, monitor) => {
-            const dropResult = monitor.getDropResult();
-
+            let dropResult = monitor.getDropResult();
             if (item && dropResult) {
                 console.log(dropResult);
-                props.onDropNote(props.note,
-                    dropResult.x,
-                    dropResult.y
-                );
+                props.onDropNote(props.note,dropResult.sequencePos);
             }
         },
         collect: (monitor) => ({
@@ -111,23 +107,46 @@ function Note(props) {
         preview(getEmptyImage(), { captureDraggingState: false })
     }, [])
 
-
-    if (isDragging) {
-        return <div ref={drag} />
-    }
-
+    if (isDragging) {return <div ref={drag} />}
 
     return (
         <NoteOuter ref={drag}
-            onMouseUp={(event) => { NoteClick(event, props.note) }} $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
-            <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
+            onMouseUp={(event) => { NoteClick(event, props.note) }} $note={props.note} $editor={props.editor} $beat={props.note.beat}>
+            <NoteHandle direction={'left'} note={props.note} onDropNoteHandle={props.onDropNoteHandle}/>
+            <NoteName>{props.note.pitch}</NoteName>
+            <NoteHandle direction={'right'} note={props.note} onDropNoteHandle={props.onDropNoteHandle}/>
         </NoteOuter>
     )
 };
 
 export default Note;
 
-const NotePreviewOuter = styled(NoteOuter)`
+function NoteHandle(props) {
+    const [{ isDragging }, drag, preview] = useDrag(() => ({
+        type: ItemTypes.NOTEHANDLE,
+        item: { name: 'notehandle', note: props.note, direction: props.direction },
+        end: (item, monitor) => {
+            let dropResult = monitor.getDropResult();
+            if (item && dropResult) {
+                props.onDropNoteHandle(props.note,item.direction,dropResult.sequencePos);
+            }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+            handlerId: monitor.getHandlerId(),
+        }),
+    }))
+
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: false })
+    }, [])
+
+    return (
+        <NoteHandleStyle {...props} ref={drag}/>
+    )
+};
+
+const PreviewNoteOuter = styled(NoteOuter)`
     left:0;
     top:0;
     color:#fff;
@@ -136,10 +155,34 @@ const NotePreviewOuter = styled(NoteOuter)`
     border-radius:3px;
 `;
 
-export function NotePreview(props) {
+export function PreviewNote(props) {
     return (
-        <NotePreviewOuter $pitch={props.note.pitch} $editor={props.editor} $beat={props.note.beat}>
-            <NoteHandle left /><NoteName>{props.note.pitch}</NoteName><NoteHandle right />
-        </NotePreviewOuter>
+        <PreviewNoteOuter $note={props.note} $editor={props.editor}>
+            <NoteHandle direction={'left'} note={props.note}/><NoteName>{props.note.pitch}</NoteName><NoteHandle direction={'right'} note={props.note}/>
+        </PreviewNoteOuter>
+    )
+};
+
+export function PreviewNoteHandle(props) {
+    return (
+        <div style={{width:'2px',height:'20px',background:'red'}} direction={'left'} note={props.note}/>
+    )
+};
+
+const OutlineNote = styled(NoteOuter)`
+    left: ${props => (props.$beat)}px;
+    color:#fff;
+    border-color:#ffff;
+    background:none;
+    border-radius:3px;
+`;
+
+export function PreviewNoteOutline(props) {
+console.log('props');
+    console.log(props.editor.beatsToPixels);
+    console.log(props.note.beat * props.editor.beatsToPixels);
+    return (
+        <OutlineNote $note={props.note} $beat={0} $editor={props.editor}>
+        </OutlineNote>
     )
 };

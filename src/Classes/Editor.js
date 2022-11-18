@@ -18,7 +18,7 @@ export default class Editor {
             let quantize = 1 / this.subdivisions;
             beat = Math.floor(beat / quantize) * quantize;
         }
-        this.app.state.song.AddNote(this.selectedTrack,pitch,4,beat);
+        this.app.state.song.AddNote(this.selectedTrack,pitch,1+Math.random()*8,beat);
     }
 
     changeSelectedTrack = (newTrackIndex) => {

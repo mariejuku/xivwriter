@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { InputGroup, Stack } from 'react-bootstrap';
-
+import { pitches } from "./constants";
 import { Icon, IconButton, Form, Button, Divider, PianoKey, PianoOctave, Container, Row, Col, Measure } from "./layout/layout";
 import { faMusic, faSearchPlus, faSearchMinus, faSearchLocation, faEdit, faMousePointer, faEraser, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,31 +22,15 @@ right:0;
 top:0;
 bottom:0;
 overflow:hidden;
-`
+`;
 const CanvasPanel = styled(Col)`
 position:relative;
-`
-
-const pitches = [
-    'C6',
-    'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
-    'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
-    'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3', 'C#3', 'C3'
-]
+`;
 
 class Sequencer extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props) { super(props); }
 
-        this.state = {
-            pos: {
-                pitch: 'C5',
-                beat: 0
-            }
-        }
-    }
-
-    MousePosToSequencePos = (pos) => {
+    CanvasPosToSequencePos = (pos) => {
         let editor = this.props.editor;
         let beat = pos.x / editor.beatsToPixels;
         let quantizedBeat = Math.floor(beat * editor.subdivisions) / editor.subdivisions;
@@ -61,18 +45,28 @@ class Sequencer extends React.Component {
     }
 
     onCanvasClick = (button, mousePos) => {
-        let rollPos = this.MousePosToSequencePos(mousePos);
+        let rollPos = this.CanvasPosToSequencePos(mousePos);
         this.props.editor.SelectInPianoRoll(rollPos.pitch, rollPos.beat);
     }
 
-    onDropNote = (note, mousePos) => {
-        console.log('mouse pos:');
-        console.log(mousePos);
-        let rollPos = this.MousePosToSequencePos(mousePos);
-        console.log('move note pos:');
-        console.log(rollPos);
-        console.log(note);
-        this.props.song.MoveNote(note.track.index, note.key, rollPos.pitch, rollPos.beat);
+    onDropNote = (note, sequencePos) => {
+        this.props.song.EditNote(note.track.index, note.key, sequencePos.pitch, sequencePos.beat, note.duration);
+    }
+
+    onDropNoteHandle = (note, handleSide, sequencePos) => {
+        let newDuration = note.duration;
+        let newBeat = note.beat;
+        switch(handleSide) {
+            case 'left':
+                newDuration = (note.duration + note.beat) - sequencePos.beat;
+                newBeat = Math.min(-.125 + note.duration + note.beat,sequencePos.beat);
+                break;
+            case 'right':
+                newDuration = sequencePos.beat - note.beat;
+                break;
+        }
+        newDuration = Math.max(newDuration, 0.125);
+        this.props.song.EditNote(note.track.index, note.key, note.pitch, newBeat, newDuration);
     }
 
     render() {
@@ -106,9 +100,9 @@ class Sequencer extends React.Component {
                         </PianoRoll>
                     </CanvasPanel>
                     <CanvasPanel>
-                        <SequencerCanvas onCanvasClick={this.onCanvasClick} onDropNote={this.onDropNote}
-                            song={this.props.song} editor={this.props.editor}
-                            pos={this.state.pos} />
+                        <SequencerCanvas onCanvasClick={this.onCanvasClick} onDropNote={this.onDropNote} onDropNoteHandle={this.onDropNoteHandle} 
+                        song={this.props.song} editor={this.props.editor} 
+                        CanvasPosToSequencePos={this.CanvasPosToSequencePos} />
                     </CanvasPanel>
                 </SequenceRow>
             </>

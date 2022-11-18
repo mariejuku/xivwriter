@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import React from 'react';
 import Soundfont from 'soundfont-player';
-import Editor from './Editor';
+import Editor from './Classes/Editor';
 import Song, { Track } from './Classes/Song';
 
 import { H1, Overlay } from './layout/page';
