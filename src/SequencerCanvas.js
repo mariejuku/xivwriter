@@ -192,7 +192,7 @@ const SequencerCanvas = props => {
                             <Note key={note.key} note={note} editor={editor} onDropNote={props.onDropNote} onDropNoteHandle={props.onDropNoteHandle} />
                         ))}
                         <DragLayerHover snapToGrid={false} editor={editor} />
-                        <DragLayerPreview canvas={canvasRef} CanvasPosToSequencePos={props.CanvasPosToSequencePos} song={song} editor={editor} />
+                        {/* <DragLayerPreview canvas={canvasRef} CanvasPosToSequencePos={props.CanvasPosToSequencePos} song={song} editor={editor} /> */}
                     </CanvasOverlay>
                 </CanvasDropArea>
             </SequencerDiv>
@@ -277,7 +277,7 @@ export const DragLayerPreview = (props) => {
 
         switch (itemType) {
             case ItemTypes.NOTE:
-                return <PreviewNoteOutline note={item.note} editor={props.editor} />
+                return <PreviewNoteOutline note={item.note} offset={currentOffset} editor={props.editor} />
             default:
                 return null
         }

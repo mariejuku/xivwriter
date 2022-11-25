@@ -55,7 +55,7 @@ line-height:0;
 padding:0;
 
 top: ${props => (pitches.indexOf(props.$note.pitch) * 20)}px;
-left: ${props => (props.$beat * props.$editor.beatsToPixels)}px;
+left: ${props => (props.$note.beat * props.$editor.beatsToPixels)}px;
 
 border-radius:4px 8px 8px 4px;
 transition:border-radius .1s;
@@ -170,7 +170,6 @@ export function PreviewNoteHandle(props) {
 };
 
 const OutlineNote = styled(NoteOuter)`
-    left: ${props => (props.$beat)}px;
     color:#fff;
     border-color:#ffff;
     background:none;
@@ -178,11 +177,8 @@ const OutlineNote = styled(NoteOuter)`
 `;
 
 export function PreviewNoteOutline(props) {
-console.log('props');
-    console.log(props.editor.beatsToPixels);
-    console.log(props.note.beat * props.editor.beatsToPixels);
     return (
-        <OutlineNote $note={props.note} $beat={0} $editor={props.editor}>
+        <OutlineNote $note={props.note} $editor={props.editor} offset={props.offset}>
         </OutlineNote>
     )
 };
