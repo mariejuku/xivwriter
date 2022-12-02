@@ -4,4 +4,4 @@ import styled from "styled-components";
 export * from './page';
 export * from './controls';
 export * from './piano';
-export * from './note';
+export * from '../note';

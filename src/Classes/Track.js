@@ -35,6 +35,7 @@ export class Track {
         this.notes = {};
         this.notesByPosition = {};
         this.key = `${index}-${this.instrument.name}-${Date.now()}`;
+        this.color = `#f00`;
 
         // Add some notes:
         const note = new MidiWriter.NoteEvent({ pitch: ['C4', 'D4', 'E4'], duration: '4' });

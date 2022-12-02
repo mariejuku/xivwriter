@@ -2,7 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 import { Container as bContainer, Row as bRow, Col as bCol, Button as bButton, Form as bForm } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ItemTypes } from '../constants';
+import { ItemTypes } from './constants';
 import { useDrag } from 'react-dnd';
 import { useEffect } from 'react';
 import { getEmptyImage } from 'react-dnd-html5-backend'
